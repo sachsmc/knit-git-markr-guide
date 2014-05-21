@@ -4,7 +4,7 @@
 Introduction
 ---------------
 
-> Your closest collaborator is you six months ago, but you don't reply emails. 
+> Your closest collaborator is you six months ago, but you don't reply to emails. 
 
 > -Paul Wilson
 
