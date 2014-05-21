@@ -72,7 +72,135 @@ There are alternative to github. The one that I'm aware of is called [Bitbucket]
 How do I use them? 
 ------------------
 
+### Getting started
 
+Begin tracking the contents of a folder by using `git init`. This creates a hidden file that tells `git` what files to track. Congratulations, you've created your first repository!
+
+![init](img/init.png)
+
+Now add content to the folder. Copy over documents or code, or create new files. Here we will make a simple readme file in [markdown](http://rmarkdown.rstudio.com) syntax. 
+
+```
+echo "This is a *readme* file for my-first-repo" > readme.md
+```
+
+Check the status of the tracker by running `git status`. It will inform you that a file has been changed but it is not tracked: 
+
+```{bash}
+On branch master
+
+Initial commit
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	readme.md
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+```
+
+Track the new files (the `.` means add everything in the directory): 
+```{bash}
+git add .
+``` 
+Checking the status again, we see that the changes are **staged**, meaning ready to be committed. 
+
+```{bash}
+my-first-repo sachsmc$ git status
+On branch master
+
+Initial commit
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+
+	new file:   readme.md
+```
+
+Commit the changes making sure to include a detailed description of what was changed. 
+
+```{bash}
+my-first-repo sachsmc$ git commit -m "Added readme.md"
+[master (root-commit) f92799f] Added readme.md
+ 1 file changed, 1 insertion(+)
+ create mode 100644 readme.md
+```
+
+Now this is what the repository history looks like:
+
+![commmit1](img/commit1.png)
+
+
+### Remote repositories
+
+
+Github makes it easy to centralize and share your work. All of the above steps can be accomplished in the github web interface. From the repositories tab, click on **new repository**
+
+![git1](img/github-init.png)
+
+Git your repo a name, and click the option to initialize with a readme. Finally, click **create repository**
+
+![git2](img/git-init2.png)
+
+
+There are several ways to interact with a remote repository. **Clone** a repository to copy it to your local working drive. After making changes, **commit** them locally, then **push** the commit back to the remote repository. Doing this ensures that the *entire commit history* is saved to the remote repository. 
+
+![git-remote](img/remote1.png)
+
+If you change computers, or have a hard-drive failure, or you aren't sure what local folder is most up-to-date, simply clone the remote repository and continue working. 
+
+Github provides desktop applications for Windows, OSX, and Linux. Using these applications makes interacting with remotes much easier. See this link for resources to get started with whichever OS you prefer https://help.github.com/categories/54/articles. 
+
+Collaborating with Github
+------------------
+
+Let's learn how to use github by walking through the lifecycle of a scientific article. Let's say I'm working on a paper with my friend Sue. The paper involves some statistical analysis of real data, and some simulation studies. Sue is the expert on the data example and application, while I'm taking the lead on the manuscript. Create an initial commit. I come up with an inital draft `.tex` file, some analyses in `.R` together with all the associated data and output. I make commits at appropriate stopping points. 
+
+### Branching and merging
+
+Sue is ready to work on the paper. Instead of working on the same repo, she creates a new **branch**. By default, the main branch is called `master` which represents the most stable version of the content. Sue makes a branch called `sues-working`. She edits the files as she sees fit, adding, changing, and making commits along the way. Changes she commits do not affect the `master`. I also continue working and making commits. 
+
+![branch](img/branch1.png)
+
+When Sue is finished making her contributions, she is ready to merge the `sues-working` branch back into `master`. To accomplish this, she will push all of her changes to github, then **submit a pull request**. 
+
+![pull](img/pull-req.png)
+
+A **pull request** is a request to incorporate changes from one branch into another. It doesn't merge them automatically, but rather opens a discussion about possible changes. The repo owner can review the changes, make comments, and suggest edits before merging. Here we can fully harness the power of `git` and `diff`. You can see that every addition, deletion, and change is highlighted in the window. You can make general comments on the request, add comments to specific lines of code, and create **issues**. You can see that **conflicts** are highlighted in yellow. Conflicts arise when the same line is edited in different ways. To resolve a conflict, the file must be edited on one of the branches and committed. Changes that can be merged without conflict are in green. 
+
+![pull2](img/diff.png)
+
+The github desktop application will prompt you to resolve any merge conflicts. It will open up a text editor, showing each conflicting line. You can remove the conflict by choosing from the two options or combining the two in some way. Commit all the changes and the branches can be merged. Again, the entire commit history is saved along with any discussion of issues!
+
+See https://help.github.com/articles/resolving-merge-conflicts for more information about conflicts. 
+
+![merge](img/merge.png)
+
+### Smaller contributions
+
+For small changes such as typos or rephrasing, collaborators can edit files directly in the github web interface. Pressing submit proposes the file changes that the owner can accept, reject, or modify. 
+
+![propose](img/filechange.png)
+
+More expansive or general suggestions can be submitted as **issues**. Many options exist for issues. You can label them, drag and drop images as support, assign specific collaborators to resolve them, and more. **Milestones** are a way to schedule and track big steps, such as journal submission. Once you create a milestone with a due date, you can attach specific issues that need to be achieved to reach that milestone. 
+
+![issue](img/issue.png)
+
+
+Conclusion
+-----------
+
+This was a brief introduction to using git and github for collaboration. There are many more features available and more are introduced as github develops. Here are some links to continue exploring the word of version control. 
+
+ Topic | Link 
+ ------|------
+KBroman's guide | https://kbroman.github.io/github_tutorial/
+Github tutorials | https://guides.github.com/
+Possible workflows | https://www.atlassian.com/git/workflows
+Another tutorial | https://www.atlassian.com/git/tutorial
+Github website hosting | https://pages.github.com/ 
+ 
 
 
 
