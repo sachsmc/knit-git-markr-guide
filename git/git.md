@@ -191,16 +191,18 @@ More expansive or general suggestions can be submitted as **issues**. Many optio
 Conclusion
 -----------
 
-This was a brief introduction to using git and github for collaboration. There are many more features available and more are introduced as github develops. Here are some links to continue exploring the word of version control. 
+This was a brief introduction to using git and github for collaboration. It is a bit of a commitment to learn and use, but the benefits are enormous. You will save the entire history of changes to a project, you can go back to any point in time (and see what has changed between any two points in time), you don’t have to worry about breaking things that work, and you can easily merge changes from multiple people.
+
+There are many more features available and more are introduced as github develops. Here are some links to continue exploring the word of version control. 
 
  Topic | Link 
  ------|------
-KBroman's guide | https://kbroman.github.io/github_tutorial/
-Github tutorials | https://guides.github.com/
-Possible workflows | https://www.atlassian.com/git/workflows
-Another tutorial | https://www.atlassian.com/git/tutorial
-Github website hosting | https://pages.github.com/ 
- 
+KBroman's guide | http://kbroman.github.io/github_tutorial/
+Github tutorials | http://guides.github.com/
+Possible workflows | http://www.atlassian.com/git/workflows
+Another tutorial | http://www.atlassian.com/git/tutorial
+Github website hosting | http://pages.github.com/ 
+Bitbucket alternative | http://bitbucket.org
 
 
 
