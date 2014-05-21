@@ -1,0 +1,41 @@
+---
+title: "rmarkdown-example"
+output: pdf_document
+---
+
+
+```{r libraries}
+library(knitr)
+library(xtable)
+library(ggplot2)
+```
+
+Use `xtable` or `kable` to format tables.
+
+```{r xable, results='asis'}
+xtable(head(mtcars))
+```
+
+```{r kable, results='asis'}
+kable(head(mtcars))
+```
+
+Code and warnings shown.
+
+
+```{r fig1}
+ggplot(mtcars, aes(x = hp, y = mpg)) + geom_point() + stat_smooth()
+```
+
+
+Don't show code or warnings.
+
+
+```{r fig2, echo = FALSE, warning = FALSE, message = FALSE}
+ggplot(mtcars, aes(x = gear)) + geom_bar()
+```
+
+Example of inline code evaluation.
+
+The average (standard deviation) mpg is `r paste0(round(mean(mtcars$mpg), 1), " (", round(sd(mtcars$mpg), 1), ")")`.
+
