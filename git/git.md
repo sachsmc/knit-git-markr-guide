@@ -193,7 +193,31 @@ Conclusion
 
 This was a brief introduction to using git and github for collaboration. It is a bit of a commitment to learn and use, but the benefits are enormous. You will save the entire history of changes to a project, you can go back to any point in time (and see what has changed between any two points in time), you don’t have to worry about breaking things that work, and you can easily merge changes from multiple people.
 
-There are many more features available and more are introduced as github develops. Here are some links to continue exploring the word of version control. 
+## Solutions to the Examples
+
+### Example 1: Reverting changes
+
+To go back to a previous version of what you had already done, use `git revert`:
+
+```{bash}
+git revert HEAD~2..HEAD
+```
+This command will revert to what you had two commits ago. In fact, what this does behind the scenes is create a new commit that reverses all the changes made during the previous two commits. This way ensures that the entire history is saved (in case the PI changes their mind again later). 
+
+### Example 1a: Determining latest version
+
+Easy, look and see what the latest code does in `master`. Obviously, if you have poor coding practices and sloppy file management, `git` won't save you. At least there is a public record of what was done most recently. 
+
+### Example 2: Collaborating
+
+As in the previous section, all of our co-authors will make changes on github. Heavy contributors are likely to make their own branches and submit pull requests. Others may just fix typos. Either way, there is a centralized record of who is doing what and ample opportunities to discuss changes. 
+
+### Example 3: Sharing
+
+Another easy one to fix with `git` and github. At the end of every paper or presentation, include a sentence like "code for this analysis is available at [the repository](https://github.com/sachsmc/knit-git-markr-guide/blob/master/git/git.md)". Better yet, make a webpage: http://sachsmc.github.io. Interested parties have easy access to you work, and are encouraged to contribute. 
+
+
+There are many more features available and more are introduced as github develops. Here are some links to continue exploring the exciting world of version control. 
 
  Topic | Link 
  ------|------
