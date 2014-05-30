@@ -10,6 +10,7 @@ Introduction to `knitr`
 ===================
 
 > Programs are meant to be read by humans and only incidentally for computers to execute. 
+
 > - Donald Knuth
 
 Motivation
@@ -25,7 +26,7 @@ This is important for reproducible research because you can create reports, pape
 
 There are many advantages to creating scientific content using simple text documents. For one, they are future-proof. Microsoft and Apple are continually updating their software and document formats. In 5 years I probably won't be able to easily open a Word document that I created today, and likewise, when a new document format comes out (remember when .docx was new?) it takes a while for it to be widely adopted. It is highly unlikely that text documents will become obsolete. I can still open a text file that I created on my old Apple IIe. Secondly, content tracking tools like `git` and github work wonderfully with text files. It is dead-easy to view line-by-line changes in a text file. 
 
-Tools like `knitr`, `rmarkdown`, and pandoc do the hard work of translating your text files into "production" documents, like beautifully typeset pdfs, smooth presentations, and Word documents that your collaborators can't live without. Creating the base in a text file allows you to focus on the content and not obsess over the details like formatting and figure placement. 
+Tools like `knitr`, `rmarkdown`, and pandoc do the hard work of translating your text files into "production" documents, like beautifully typeset pdfs, smooth presentations, and Word documents that your collaborators can't live without. Creating the base in a text file allows you to focus on the content and not obsess over the details like formatting and figure placement. This document was created with `knitr` in markdown. Check out the source code [here](http://github.com/sachsmc/knit-git-markr-guide/blob/master/knitr/knit.Rmd).
 
 How to use `knitr` 
 -----------------
@@ -49,7 +50,7 @@ Or the equivalent Latex:
 
 ![tex](img/tex.png)
 
-Thus markdown has the dual advantages of being readble on it's own, and having associated tools to create other document formats from it. 
+Thus markdown has the dual advantages of being readble on it's own, and having associated tools to create other document formats from it. Math in markdown is just like math in Latex. 
 
 ### Incorporating code chunks
 
@@ -58,7 +59,7 @@ In markdown, the start of a code chunk is indicated by three backticks and the e
 ```{r setup, include=FALSE}
 library(stringr)
 library(knitr)
-opts_chunk$set(tidy = F)
+opts_chunk$set(tidy = FALSE)
 
 knit_hooks$set(source = function(x, options){
   if (!is.null(options$verbatim) && options$verbatim){
@@ -81,14 +82,108 @@ knit_hooks$set(source = function(x, options){
 ## code goes in here
 ```
 
-Inline code is similar, using single backticks instead. Inline code does not have names or options. For example,  ```r rnorm(10)```. 
+Inline code is similar, using single backticks instead. Inline code does not have names or options. For example,  `r noquote("\x60r rnorm(10)\x60")`. 
 
-Here's an example:
+Here's an example of raw output using the `mtcars` dataset:
 
 ```{r mtcars-example, verbatim = TRUE}
-head(mtcars)
 lm(mpg ~ hp + wt, data = mtcars)
 ```
+
+And here's a plot
+
+```{r mt-plot, verbatim = TRUE}
+library(ggplot2)
+ggplot(mtcars, aes(y = mpg, x = wt, size = hp)) + geom_point() + stat_smooth(method = "lm", se = FALSE)
+```
+
+The concept is very simple. Anything you want to do in `R` is incorporated into your document, the results alongside the code. The important details to learn are methods of controlling the output. This means making nice looking tables, decent figures, and formatting inline results. We will cover these topics next. 
+
+Controlling `R` output
+========================
+
+### Tables
+
+When outputting tables in knitr, it is important to use the option `results = 'asis'`. There are several options for formatting tables in `R`. The `knitr` package includes a function called `kable` that makes basic **k**nitr t**ables**. There are options to control the number of digits, whether row names are included or not, column alignment, and other options that depend on the output type. 
+
+```{r kable, results = 'asis', verbatim = TRUE}
+kable(head(mtcars), digits = 2, align = c(rep("l", 4), rep("c", 4), rep("r", 4)))
+```
+
+For finer control, use the `xtable` package. There are tons of options (see the help file), and the interface is a bit clunky. For instance some options are passed to `xtable`, while others are passed to `print.xtable`. The key one for markdown is to use `print(xtable(x), type = "html")`. 
+
+```{r xtable, results = 'asis', verbatim = TRUE}
+library(xtable)
+print(xtable(head(mtcars)), type = "html")
+```
+
+The `stargazer` package creates good-looking tables with minimal effort. It is especially useful for summarizing a series of regression models. See the help files for all the available options.
+
+```{r star, results = 'asis', cache = TRUE, verbatim = TRUE}
+library(stargazer)
+
+fit1 <- lm(mpg ~ wt, mtcars)
+fit2 <- lm(mpg ~ wt + hp, mtcars)
+fit3 <- lm(mpg ~ wt + hp + disp, mtcars)
+
+stargazer(fit1, fit2, fit3, type = 'html')
+```
+
+For long-running computations, a useful chunk option is `cache = TRUE`. This creates a folder called cache in your working directory that will store the results of the computation after the first time you run it. After that, re-knitting the document is fast. 
+
+### Figures
+
+
+
+### Inline results
+
+
+Output formats
+========================
+### Pandoc
+
+The folks at [Rstudio](http://rstudio.org) have worked hard to bundle `knitr` with [pandoc](http://johnmacfarlane.net/pandoc/), a universal document converter. Pandoc allows you to take markdown documents and convert them to almost any file format, docx, pdf, html, and much more. Furthermore, you can even convert markdown to Tex, which comes in handy for journal submission. Previously, if you wanted html output, you wrote a report in rmarkdown or rhtml and if you wanted a pdf, you had to start over with a .Rnw file. Now we can seamlessly switch between formats. The key is in defining what you want in the **front matter** of your document. 
+
+At the top of your markdown file, all of the pandoc parameters are put between `---` delimeters. For example, in this document, I have
+
+```
+---
+title: "knitr"
+author: Michael Sachs
+output: 
+  md_document:
+    variant: markdown_github
+---
+```
+
+This is the front-matter, and it is in `yaml` format. Rstudio passes these options to pandoc to convert my document to the appropriate format, after knitting. See all of the possible options here http://rmarkdown.rstudio.com. 
+
+For example, if I want pdf output, keeping the intermediate tex file I would use 
+
+```
+---
+title: "knitr"
+author: Michael Sachs
+output: 
+  pdf_document:
+    keep_tex: true
+---
+```
+
+Other commond document formats are `word_document`, `html_document`, and `beamer_presentation`. You can include a bibliography in a variety of formats, including `.bib`, with the `bibliography: myfile.bib` option. Include citations with the `@auth99` syntax. 
+
+To recap, this diagram illustrates my typical workflow. I start with a .Rmd, an r-markdown document with code, background, and descriptions. `knitr` does the work to evaluate the code, putting the results in a markdown document, which can then be converted to a variety of formats with pandoc. To extract the R code from the original document I use the `knitr::purl` function. I can then easily incorporate the code chunks into other document types, like presentations. 
+
+![flow](img/knitr-workflow.png)
+
+
+Resources
+======================
+
+
+### Installation
+
+### Help
 
 
 
