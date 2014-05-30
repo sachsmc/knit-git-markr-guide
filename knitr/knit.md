@@ -105,9 +105,8 @@ For finer control, use the `xtable` package. There are tons of options (see the 
     print(xtable(head(mtcars)), type = "html")
     ```
 
-<!-- html table generated in R 3.1.0 by xtable 1.7-3 package -->
-<!-- Fri May 30 15:35:33 2014 -->
-<TABLE border=1>
+
+<TABLE>
 <TR> <TH>  </TH> <TH> 
 mpg
 </TH> <TH> 
@@ -281,18 +280,16 @@ Valiant
 </TD> <TD align="right"> 
 1.00
 </TD> </TR>
-   </TABLE>
+</TABLE>
 
 
 The `stargazer` package creates good-looking tables with minimal effort. It is especially useful for summarizing a series of regression models. See the help files for all the available options.
 
     ```{r star, results = 'asis', warning=FALSE, message=FALSE}
     library(stargazer, quietly = TRUE)
-
     fit1 <- lm(mpg ~ wt, mtcars)
     fit2 <- lm(mpg ~ wt + hp, mtcars)
     fit3 <- lm(mpg ~ wt + hp + disp, mtcars)
-
     stargazer(fit1, fit2, fit3, type = 'html')
     ```
 
