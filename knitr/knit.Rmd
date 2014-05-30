@@ -119,8 +119,8 @@ print(xtable(head(mtcars)), type = "html")
 
 The `stargazer` package creates good-looking tables with minimal effort. It is especially useful for summarizing a series of regression models. See the help files for all the available options.
 
-```{r star, results = 'asis', cache = TRUE, verbatim = TRUE}
-library(stargazer)
+```{r star, results = 'asis', warning=FALSE, message=FALSE, verbatim = TRUE}
+library(stargazer, quietly = TRUE)
 
 fit1 <- lm(mpg ~ wt, mtcars)
 fit2 <- lm(mpg ~ wt + hp, mtcars)
