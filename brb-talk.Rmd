@@ -1,0 +1,567 @@
+---
+title: "Some Tools for Reproducible Research"
+author: "Michael Sachs"
+date: "June 10, 2014"
+output:
+  ioslides_presentation:
+    highlight: tango
+    self_contained: no
+    widescreen: yes
+---
+
+# Introduction
+
+## Scientific Pathway
+
+![knit-flow1](knitr/img/repro-flow1.png)
+
+
+## Scientific Cycle
+
+![knit-flow2](knitr/img/repro-flow2.png)
+
+## Where do we fit in? 
+
+![knit-flow3](knitr/img/repro-flow3.png)
+
+## Tools to make our lives easier
+
+![knit-flow4](knitr/img/repro-flow4.png)
+
+# Statisticians' Role
+
+## Data analysis
+
+![analysis](knitr/img/analysis.png)
+
+Goal: avoid making arbitrary/data-driven decisions that go undocumented or unreported
+
+## Two of my favorite tools
+
+<div class="columns-2">
+
+![yarn](knitr/img/yarn.png)
+
+knit (weave) data analysis code to the report
+
+![github](knitr/img/git.png)
+
+track versions and collaborate over countless iterations
+
+</div>
+
+#knitr
+
+<q>
+Programs are meant to be read by humans and only incidentally for computers to execute. 
+</q>
+<div class="author">
+        -Donald Knuth
+</div>
+
+## Motivation
+
+- Cut and paste for report production is not a viable method
+    + tedious
+    + slow
+    + error-prone
+- Incorporate analysis code into text documents
+    + `knit` to create results
+    + no extra steps to get desired output
+    + post-process to get any type of output format
+- Literate documents
+    + Code creates results to inform report
+    + Prose surrounding code informs analysis
+    
+## The importance of text
+
+- Text is future-proof
+    + No worries about `.doc` $\rightarrow$ `.docx`
+    + Cross-platform
+    + Useful tools exist to track line-by-line changes in text <div class="blue"> (git) </div>
+- Our requirements
+    + Text doc should stand on its own
+    + Minimal, semantic markup 
+    + Applies to code also
+    
+## Markdown
+
+Plain-text formatting. Indicate what elements represent, not how they should look. Minimal, yet flexible, html is interpreted correctly.
+
+![markdown](knitr/img/mark1.png)
+
+## Contrast with html and tex
+
+![ht](knitr/img/html.png)
+![tex](knitr/img/tex.png)
+
+## Incorporating code chunks
+
+
+```{r setup, include=FALSE}
+library(stringr)
+library(knitr)
+opts_chunk$set(tidy = FALSE)
+
+knit_hooks$set(source = function(x, options){
+  if (!is.null(options$verbatim) && options$verbatim){
+    opts = gsub(",\\s*verbatim\\s*=\\s*TRUE\\s*", "", options$params.src)
+    bef = sprintf('\n\n    ```{r %s}\n', opts, "\n")
+    stringr::str_c(
+      bef, 
+      knitr:::indent_block(paste(x, collapse = '\n'), "    "), 
+      "\n    ```\n"
+    )
+  } else {
+    stringr::str_c("\n\n```", tolower(options$engine), "\n", 
+      paste(x, collapse = '\n'), "\n```\n\n"
+    )
+  }
+})
+```
+
+Three backticks:
+
+
+```{r my-first-chunk, results='asis', verbatim = TRUE} 
+## code goes in here and gets evaluated
+```
+
+See http://yihui.name/knitr/options#chunk_options for all available options. 
+
+Inline code uses single backticks
+
+Here I am using `` `#r rnorm(1)` `` to generate a random digit: `r rnorm(1)`. (Omit the pound sign)
+
+## Results, raw output {.smaller}
+
+Raw output using the `mtcars` dataset:
+
+```{r mtcars-example, verbatim = TRUE}
+summary(lm(mpg ~ hp + wt, data = mtcars))
+```
+
+## Results, a table {.smaller}
+
+Since markdown interprets html, we can use `kable` to generate html tables from `R`
+
+```{r table-example, results='asis', verbatim = TRUE}
+kable(head(mtcars))
+```
+
+## Results, a plot {.smaller}
+
+```{r mt-plot, verbatim = TRUE}
+library(ggplot2)
+ggplot(mtcars, aes(y = mpg, x = wt, size = hp)) + geom_point() + stat_smooth(method = "lm", se = FALSE)
+```
+
+## Controlling `R` output
+
+There are three functions I'm aware of that will help create output tables. 
+
+- `kable` in the `knitr` package
+    + simple table generator
+    + markdown, html, or tex output
+    + few options for customization
+- `xtable` in the `xtable` package
+    + many options for customization
+    + html or tex output
+    + clunky interface, some options go to `xtable()` others to `print.xtable()`
+- `stargazer` in the `stargazer` package
+    + great for summarizing regression models
+    + tons of options
+    + pretty output in html, ascii or tex
+
+
+## `kable` example
+
+```{r kable, results = 'asis', verbatim = TRUE}
+kable(head(mtcars), digits = 2, align = c(rep("l", 4), rep("c", 4), rep("r", 4)))
+```
+
+## `xtable` example
+
+```{r xtable, results = 'asis', verbatim = TRUE}
+library(xtable)
+print(xtable(head(mtcars, 3)), type = "html")
+```
+
+## `stargazer` example {.smaller}
+
+```{r star, results = 'asis', warning=FALSE, message=FALSE, verbatim = TRUE}
+library(stargazer, quietly = TRUE)
+fit1 <- lm(mpg ~ wt, mtcars)
+fit2 <- lm(mpg ~ wt + hp, mtcars)
+fit3 <- lm(mpg ~ wt + hp + disp, mtcars)
+stargazer(fit1, fit2, fit3, type = 'html')
+```
+
+## inline results {.smaller}
+
+Generate every in-text number from code. `paste` and `sprintf` are my friends. 
+
+```{r paste-in, results = 'hide', verbatim = FALSE}
+paste_meansd <- function(x, digits = 2, na.rm = TRUE){
+  paste0(round(mean(x, na.rm = na.rm), digits), " (", round(sd(x, na.rm = na.rm), digits), ")")  
+}
+
+## The mean (sd) of a random sample of normals is `r paste_meansd(rnorm(100))`
+```
+
+The mean (sd) of a random sample of normals is `r paste_meansd(rnorm(100))`
+
+```{r sprint-in, results = 'hide'}
+sprint_CI95 <- function(mu, se, trans = function(x) x) {
+  lim <- trans(mu + c(-1.96, 1.96)*se)
+  ### <b>
+  sprintf("%.2f (95 CI: %.2f to %.2f)", mu, lim[1], lim[2])
+  ### </b>
+}
+bfit <- lm(hp ~ disp, mtcars)
+## The coefficient estimate is `r sprint_CI95(bfit$coeff[2], sqrt(diag(vcov(bfit)))[2])`
+```
+The coefficient estimate is `r sprint_CI95(bfit$coeff[2], sqrt(diag(vcov(bfit)))[2])`.
+
+
+## Figure options
+
+The important ones:
+
+- `dev`, graphics device. E.g. pdf, png, check out `tikzDevice` if you are creating pdf output: 
+    + http://bit.ly/114GNdP
+- `path` where to save the plot files
+- `fig_width`, `fig_height`, in inches. Can also be set globally.
+- `fig_align`, left, right or center
+
+
+## Extending `knitr` {.smaller}
+
+Output and rendering can be customized endlessly. `knitr` is written in `R` to process chunks, so write your own functions. These types of functions are called "hooks". For example, in this document I used a custom hook to display the code chunks as they appear: 
+
+```{r hook, eval = FALSE}
+knit_hooks$set(source = function(x, options){
+  if (!is.null(options$verbatim) && options$verbatim){
+    opts = gsub(",\\s*verbatim\\s*=\\s*TRUE\\s*", "", options$params.src)
+    bef = sprintf('\n\n    ```{r %s}\n', opts, "\n")
+    stringr::str_c(
+      bef, 
+      knitr:::indent_block(paste(x, collapse = '\n'), "    "), 
+      "\n    ```\n"
+    )
+  } else {
+    stringr::str_c("\n\n```", tolower(options$engine), "\n", 
+      paste(x, collapse = '\n'), "\n```\n\n"
+    )
+  }
+})
+```
+Credit: [Ramnath Vaidyanathan](https://ramnathv.github.io/posts/verbatim-chunks-knitr/)
+
+
+## Getting started
+
+- Download the [Rstudio preview release](http://www.rstudio.com/products/rstudio/download/preview/)
+    + It comes with everything you need (except Latex)
+    + Menu options to create .Rmd files
+    + Handy button to `knit` documents
+    + Preview output
+- Conversion to output formats uses `pandoc`
+    + Translates between semantic markup
+    + Endless customization
+    + Pass options via the *front matter* at the top of document
+    
+## Front matter
+    
+- Document types
+    + `pdf_document`, `word_document`, `html_document`
+    + `beamer_presentation`, `ioslides_presentation`
+- Other options
+    + `bibliography: mybib.bib`
+    + Cite with `@paperkey`
+    + See http://rmarkdown.rstudio.com/ for complete documentation
+
+```
+---
+title: "Some Tools for Reproducible Research"
+author: "Michael Sachs"
+date: "June 10, 2014"
+output: ioslides_presentation
+---
+```
+Full source for this presentation available http://github.com/sachsmc/knit-git-markr-guide
+
+# git
+
+<q>
+Your closest collaborator is you six months ago, but you don't reply to emails.
+</q>
+<div class="author">
+        -Paul Wilson
+</div>
+
+## `git` and Github
+
+- `git` and http://github.com make version control and collaboration easier
+- Code, papers, presentations, etc. require iteration and input from multiple sources
+- *Ad hoc* approaches suffer and can have disastrous consequences
+- Here are some examples
+
+## Example 1: Reverting changes
+
+A recent paper I worked on used data from a disease registry, which released "frozen" databases quarterly. While working on the revisions, a new database was released. I used to new database to update the analysis because it contained the most reliable and up to date information. After completing the revisions, I received this email from the lead author (this was in 2013 btw): 
+
+<div class = "blue2 center">
+"As you can see from the paper I sent you, it is almost complete and I do not want to re-write it.  Therefore, I just want the data described in the e-mail below from the June 1, 2011 data freeze.  ... Is it possible to reconstruct the data inquiry as per what was originally delivered?"
+
+</div>
+
+
+I had not saved prior versions of the analysis code, not to mention the manuscript with all of the results incorporated into the text. My only option at that point was to start over.
+
+## Example 2: Collaborating on an analysis
+
+Another statistician took over an analysis for a manuscript that I thought was complete. Here is a real email exchange
+
+<div class = "blue2 center">
+"The manuscript says that out of 1350 participants there were 411 with incident AFib. However, when I run your code to create the dataset, I only end up with 232. The AFib data came from a file called 'mathew_main'.  Did you use anything else to get the extra AFib cases?"
+
+</div>
+
+My response:
+
+<div class = "blue2 center">
+"I'm not 100% sure about anything without looking at my code. Which file are you going on? There should be a dated .Rnw file my Afib folder that contains all the analysis code. I believe that calls an R script called "load-data-chs.R". The mathew_main file does not sound familiar, I suspect that is from a very old version of the paper. "
+
+</div>
+
+:(
+
+## Example 3: Incorporating edits on a manuscript
+
+Applied papers that I've worked on had between 5 and 13 authors. Inevitably, a "final" draft of the manuscript (usually a Word document) gets circulated *via* email and comments or suggestions are solicited. Here are the typical types of responses that I get:
+
+* A new word document with tracked changes
+* A new word document with untracked changes
+* Suggestions listed in the body of an email
+* A txt file with suggested changes
+* A scanned copy of the paper with hand-written edits
+* No response
+
+The challenge is to incorporate (or not) all of the changes from a variety of collaborators, while keeping a record of who has contributed what. 
+
+## Example 4: Sharing content
+
+Once a paper gets published, occasionally people want to use or extend the method. 
+
+<div class = "blue2 center">
+"I would be very grateful if you are able to help me implement this tool in my dataset as well."
+
+"Could you please send me your code so that I can try to apply it to my example? "
+ 
+"Would you please kindly e-mail me your article and other works in that field promptly.?"
+
+</div>
+
+
+**Email is an ineffective tool for sharing code, data, documents**
+
+
+## What is it?
+
+`git`
+
+- "The stupid content tracker", developed to manage Linux source code
+    + Files organized into **repositories**
+    + Users **commit** changes, additions, deletions
+    + Entire history of **commits** saved
+
+[Github](http://github.com)
+
+- A web interface and host for repositories
+    + Explore repositories
+    + View code, documents, etc. 
+    + Interact with collaborators
+    
+
+## Getting started
+
+Begin tracking using `git init`. This creates a hidden file that tells `git` what to track.
+
+```bash
+mkdir my-first-repo
+cd my-first-repo
+git init
+```
+
+Now add content. Copy over documents or code, or create new files.
+
+```bash
+echo "This is a *readme* file for my-first-repo" > readme.md
+```
+
+## Tracking {.smaller}
+
+Check the status of the tracker by running `git status`. It will inform you that a file has been changed but it is not tracked: 
+
+```bash
+On branch master
+
+Initial commit
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+  readme.md
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+```
+
+Track the new files (the `.` means add everything in the directory): 
+```bash
+git add .
+``` 
+
+## Committing {.smaller}
+
+```bash
+my-first-repo sachsmc$ git status
+Initial commit
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+
+	new file:   readme.md
+```
+
+Commit the changes making sure to include a detailed description of what was changed. 
+
+```bash
+my-first-repo sachsmc$ git commit -m "Added readme.md"
+[master (root-commit) f92799f] Added readme.md
+ 1 file changed, 1 insertion(+)
+ create mode 100644 readme.md
+```
+
+![commmit1](git/img/commit1.png)
+
+
+## Remote repositories {.smaller}
+
+![git1](git/img/github-init.png)
+![git2](git/img/git-init2.png)
+
+
+## Interacting with remotes
+
+- **Clone** a repository to copy it to your local working drive. 
+- After making changes, **commit** them locally, 
+- **push** the commit back to the remote repository. 
+
+![git-remote](git/img/remote1.png)
+
+
+## Getting started
+
+- Set up an account on http://github.com
+- Install the desktop client http://mac.github.com or http://windows.github.com
+- Under settings, install *command line tools*
+- Most linux distros come with `git`
+
+# Collaborating with Github
+
+## The lifecycle of a paper
+
+- I'm working on a paper with my friend Sue 
+- Statistical analysis + simulation studies + discussion 
+- I decide to take the lead and create an initial repository
+- Add a draft `.tex` file, some analyses in `.R` with data and output
+- Commit at appropriate stopping points
+
+## Branching and merging
+
+<div class="green">Main branch is called *master*</div>
+
+<div class="blue">Sue creates a new branch called *sues-working*. Adding, editing, commiting</div> 
+
+Commits do not affect the other branch
+
+![branch](git/img/branch1.png)
+
+Push all of her changes to github, then **submit a pull request**. 
+
+## Pull request
+
+![pull](git/img/pull-req.png)
+
+<div class="notes">
+A **pull request** is a request to incorporate changes from one branch into another. It doesn't merge them automatically, but rather opens a discussion about possible changes. The repo owner can review the changes, make comments, and suggest edits before merging. Here we can fully harness the power of `git` and `diff`. You can see that every addition, deletion, and change is highlighted in the window. You can make general comments on the request, add comments to specific lines of code, and create **issues**. You can see that **conflicts** are highlighted in yellow. Conflicts arise when the same line is edited in different ways. To resolve a conflict, the file must be edited on one of the branches and committed. Changes that can be merged without conflict are in green. 
+</div>
+
+## Changes
+
+![pull2](git/img/diff.png)
+
+<div class="notes">
+The github desktop application will prompt you to resolve any merge conflicts. It will open up a text editor, showing each conflicting line. You can remove the conflict by choosing from the two options or combining the two in some way. Commit all the changes and the branches can be merged. Again, the entire commit history is saved along with any discussion of issues!
+
+See https://help.github.com/articles/resolving-merge-conflicts for more information about conflicts. 
+</div>
+
+![merge](git/img/merge.png)
+
+## Smaller contributions
+
+![propose](git/img/filechange.png)
+
+## Issues
+
+<div class="notes">
+More expansive or general suggestions can be submitted as **issues**. Many options exist for issues. You can label them, drag and drop images as support, assign specific collaborators to resolve them, and more. **Milestones** are a way to schedule and track big steps, such as journal submission. Once you create a milestone with a due date, you can attach specific issues that need to be achieved to reach that milestone. 
+</div>
+
+![issue](git/img/issue.png)
+
+## Summary 
+
+- `git` is a structured approach to tracking content
+    + Small committment to learn and use
+    + But benefits are enormous
+    + ... especially if using plain text files
+- [github](http://github.com) is a web interface and repository host
+    + Adds value to `git`
+    + It's not Dropbox, formal and structure commits + discussion
+    + Everything is public
+    + Alternatives: [bitbucket](http://bitbucket.org), self-hosting, local-only
+    
+## Solutions to the examples
+
+> - **Example 1** (Go back to using old data)
+> - `git revert`
+> - **Example 2** (Someone else taking over analysis)
+> - Branch from latest version on *master*
+> - Won't save you from bad coding practices
+> - Having the structure in place up front helps
+> - **Example 3** (Collaborating on manuscript)
+> - All authors submit pull requests, issues, small changes
+> - Central record, ample opportunity for discussion
+> - Who contributed what and where
+> - **Example 4** (Sharing content)
+> - Easy: Source code available at http://github.com/sachsmc/knit-git-markr-guide
+> - Better yet, a web page: http://pages.github.com/
+    
+## Resources
+
+ Topic | Link 
+ ------|------
+KBroman's UWisc Class | https://kbroman.github.io/Tools4RR/pages/schedule.html
+Github tutorials | http://guides.github.com/
+Possible workflows | http://www.atlassian.com/git/workflows
+Another tutorial | http://www.atlassian.com/git/tutorial
+Knitr homepage | http://yihui.name/knitr/
+rmarkdown documentation | http://rmarkdown.rstudio.com/
+
+More stuff and source available 
+
+http://sachsmc.github.io/knit-git-markr-guide

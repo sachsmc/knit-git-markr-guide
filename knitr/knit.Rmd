@@ -38,7 +38,7 @@ How exactly to use `knitr` depends on the input document format. First I will de
 
 ### `knitr` with markdown
 
-When I say markdown I am referring to the plain text formatting syntax, as opposed to the software. Markdown is a syntax closely related to html. It is semanic, like html, but it is much less verbose. Markdown documents can in fact stand on there own as readable text documents without being rendered. Semantic means that elements of the document are described by what they represent, as opposed to how they should look. Thus, for a title, you indicate that this text is the title, as opposed to this text should be large font and in bold. Here is an example with the result:
+When I say markdown I am referring to the plain text formatting syntax, as opposed to the software. Markdown is a syntax closely related to html. It is semanic, like html, but it is much less verbose. Markdown documents can in fact stand on their own as readable text documents without being rendered. Semantic means that elements of the document are described by what they represent, as opposed to how they should look. Thus, for a title, you indicate that this text is the title, as opposed to this text should be large font and in bold. Here is an example with the result:
 
 ![mark1](img/mark1.png)
 

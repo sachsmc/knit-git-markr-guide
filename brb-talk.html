@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Some Tools for Reproducible Research</title>
+
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="generator" content="pandoc" />
+
+
+
+  <meta name="date" content="2014-06-10" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <link rel="stylesheet" media="all" href="brb-talk_files/ioslides-13.5.1/fonts/fonts.css">
+
+  <link rel="stylesheet" media="all" href="brb-talk_files/ioslides-13.5.1/theme/css/default.css">
+  <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="brb-talk_files/ioslides-13.5.1/theme/css/phone.css">
+
+  <base target="_blank">
+
+  <script type="text/javascript">
+    var SLIDE_CONFIG = {
+      // Slide settings
+      settings: {
+                title: 'Some Tools for Reproducible Research',
+                        useBuilds: true,
+        usePrettify: true,
+        enableSlideAreas: true,
+        enableTouch: true,
+              },
+
+      // Author information
+      presenters: [
+            {
+        name: 'Michael Sachs'
+      },
+            ]
+    };
+  </script>
+
+  <style type="text/css">
+
+    b, strong {
+      font-weight: bold;
+    }
+
+    em {
+      font-style: italic;
+    }
+
+    slides > slide {
+      -webkit-transition: all 0.4s ease-in-out;
+      -moz-transition: all 0.4s ease-in-out;
+      -o-transition: all 0.4s ease-in-out;
+      transition: all 0.4s ease-in-out;
+    }
+
+    .auto-fadein {
+      -webkit-transition: opacity 0.6s ease-in;
+      -webkit-transition-delay: 0.4s;
+      -moz-transition: opacity 0.6s ease-in 0.4s;
+      -o-transition: opacity 0.6s ease-in 0.4s;
+      transition: opacity 0.6s ease-in 0.4s;
+      opacity: 0;
+    }
+
+  </style>
+
+
+
+</head>
+
+<body style="opacity: 0">
+
+<slides class="layout-widescreen">
+
+  <slide class="title-slide segue nobackground">
+        <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
+    <hgroup class="auto-fadein">
+      <h1 data-config-title><!-- populated from slide_config.json --></h1>
+      <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
+      <p data-config-presenter><!-- populated from slide_config.json --></p>
+            <p style="margin-top: 6px; margin-left: -2px;">June 10, 2014</p>
+          </hgroup>
+  </slide>
+
+<slide class='segue dark nobackground'><hgroup class = 'auto-fadein'><h2>Introduction</h2></hgroup><article  id="introduction">
+
+</article></slide><slide class=''><hgroup><h2>Scientific Pathway</h2></hgroup><article  id="scientific-pathway">
+
+<img src='knitr/img/repro-flow1.png' title=''/>
+
+</article></slide><slide class=''><hgroup><h2>Scientific Cycle</h2></hgroup><article  id="scientific-cycle">
+
+<img src='knitr/img/repro-flow2.png' title=''/>
+
+</article></slide><slide class=''><hgroup><h2>Where do we fit in?</h2></hgroup><article  id="where-do-we-fit-in">
+
+<img src='knitr/img/repro-flow3.png' title=''/>
+
+</article></slide><slide class=''><hgroup><h2>Tools to make our lives easier</h2></hgroup><article  id="tools-to-make-our-lives-easier">
+
+<img src='knitr/img/repro-flow4.png' title=''/>
+
+</article></slide><slide class='segue dark nobackground'><hgroup class = 'auto-fadein'><h2>Statisticians&#39; Role</h2></hgroup><article  id="statisticians-role">
+
+</article></slide><slide class=''><hgroup><h2>Data analysis</h2></hgroup><article  id="data-analysis">
+
+<img src='knitr/img/analysis.png' title=''/>
+
+<p>Goal: avoid making arbitrary/data-driven decisions that go undocumented or unreported</p>
+
+</article></slide><slide class=''><hgroup><h2>Two of my favorite tools</h2></hgroup><article  id="two-of-my-favorite-tools">
+
+<div class="columns-2">
+<img src='knitr/img/yarn.png' title=''/>
+
+<p>knit (weave) data analysis code to the report</p>
+
+<img src='knitr/img/git.png' title=''/>
+
+<p>track versions and collaborate over countless iterations</p></div>
+
+</article></slide><slide class='segue dark nobackground'><hgroup class = 'auto-fadein'><h2>knitr</h2></hgroup><article  id="knitr">
+
+<q> Programs are meant to be read by humans and only incidentally for computers to execute. </q>
+
+<div class="author">
+<pre >-Donald Knuth</pre></div>
+
+</article></slide><slide class=''><hgroup><h2>Motivation</h2></hgroup><article  id="motivation">
+
+<ul>
+<li>Cut and paste for report production is not a viable method
+
+<ul>
+<li>tedious</li>
+<li>slow</li>
+<li>error-prone</li>
+</ul></li>
+<li>Incorporate analysis code into text documents
+
+<ul>
+<li><code>knit</code> to create results</li>
+<li>no extra steps to get desired output</li>
+<li>post-process to get any type of output format</li>
+</ul></li>
+<li>Literate documents
+
+<ul>
+<li>Code creates results to inform report</li>
+<li>Prose surrounding code informs analysis</li>
+</ul></li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>The importance of text</h2></hgroup><article  id="the-importance-of-text">
+
+<ul>
+<li>Text is future-proof
+
+<ul>
+<li>No worries about <code>.doc</code> \(\rightarrow\) <code>.docx</code></li>
+<li>Cross-platform</li>
+<li>Useful tools exist to track line-by-line changes in text
+
+<div class="blue">
+(git)</div></li>
+</ul></li>
+<li>Our requirements
+
+<ul>
+<li>Text doc should stand on its own</li>
+<li>Minimal, semantic markup</li>
+<li>Applies to code also</li>
+</ul></li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>Markdown</h2></hgroup><article  id="markdown">
+
+<p>Plain-text formatting. Indicate what elements represent, not how they should look. Minimal, yet flexible, html is interpreted correctly.</p>
+
+<img src='knitr/img/mark1.png' title=''/>
+
+</article></slide><slide class=''><hgroup><h2>Contrast with html and tex</h2></hgroup><article  id="contrast-with-html-and-tex">
+
+<p><img src='knitr/img/html.png' title=''/> <img src='knitr/img/tex.png' title=''/></p>
+
+</article></slide><slide class=''><hgroup><h2>Incorporating code chunks</h2></hgroup><article  id="incorporating-code-chunks">
+
+<p>Three backticks:</p>
+
+<pre >```{r my-first-chunk, results=&#39;asis&#39;}
+## code goes in here and gets evaluated
+```</pre>
+
+<p>See <a href='http://yihui.name/knitr/options#chunk_options' title=''>http://yihui.name/knitr/options#chunk_options</a> for all available options.</p>
+
+<p>Inline code uses single backticks</p>
+
+<p>Here I am using <code>`#r rnorm(1)`</code> to generate a random digit: -0.3464. (Omit the pound sign)</p>
+
+</article></slide><slide class=''><hgroup><h2>Results, raw output</h2></hgroup><article  id="results-raw-output" class="smaller">
+
+<p>Raw output using the <code>mtcars</code> dataset:</p>
+
+<pre >```{r mtcars-example}
+summary(lm(mpg ~ hp + wt, data = mtcars))
+```</pre>
+
+<pre >## 
+## Call:
+## lm(formula = mpg ~ hp + wt, data = mtcars)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -3.941 -1.600 -0.182  1.050  5.854 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 37.22727    1.59879   23.28  &lt; 2e-16 ***
+## hp          -0.03177    0.00903   -3.52   0.0015 ** 
+## wt          -3.87783    0.63273   -6.13  1.1e-06 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.59 on 29 degrees of freedom
+## Multiple R-squared:  0.827,  Adjusted R-squared:  0.815 
+## F-statistic: 69.2 on 2 and 29 DF,  p-value: 9.11e-12</pre>
+
+</article></slide><slide class=''><hgroup><h2>Results, a table</h2></hgroup><article  id="results-a-table" class="smaller">
+
+<p>Since markdown interprets html, we can use <code>kable</code> to generate html tables from <code>R</code></p>
+
+<pre >```{r table-example, results=&#39;asis&#39;}
+kable(head(mtcars))
+```</pre>
+
+<table class = 'rmdtable'>
+<tr class="header">
+<th align="left"></th>
+<th align="right">mpg</th>
+<th align="right">cyl</th>
+<th align="right">disp</th>
+<th align="right">hp</th>
+<th align="right">drat</th>
+<th align="right">wt</th>
+<th align="right">qsec</th>
+<th align="right">vs</th>
+<th align="right">am</th>
+<th align="right">gear</th>
+<th align="right">carb</th>
+</tr>
+<tr class="odd">
+<td align="left">Mazda RX4</td>
+<td align="right">21.0</td>
+<td align="right">6</td>
+<td align="right">160</td>
+<td align="right">110</td>
+<td align="right">3.90</td>
+<td align="right">2.620</td>
+<td align="right">16.46</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="left">Mazda RX4 Wag</td>
+<td align="right">21.0</td>
+<td align="right">6</td>
+<td align="right">160</td>
+<td align="right">110</td>
+<td align="right">3.90</td>
+<td align="right">2.875</td>
+<td align="right">17.02</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Datsun 710</td>
+<td align="right">22.8</td>
+<td align="right">4</td>
+<td align="right">108</td>
+<td align="right">93</td>
+<td align="right">3.85</td>
+<td align="right">2.320</td>
+<td align="right">18.61</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Hornet 4 Drive</td>
+<td align="right">21.4</td>
+<td align="right">6</td>
+<td align="right">258</td>
+<td align="right">110</td>
+<td align="right">3.08</td>
+<td align="right">3.215</td>
+<td align="right">19.44</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Hornet Sportabout</td>
+<td align="right">18.7</td>
+<td align="right">8</td>
+<td align="right">360</td>
+<td align="right">175</td>
+<td align="right">3.15</td>
+<td align="right">3.440</td>
+<td align="right">17.02</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">Valiant</td>
+<td align="right">18.1</td>
+<td align="right">6</td>
+<td align="right">225</td>
+<td align="right">105</td>
+<td align="right">2.76</td>
+<td align="right">3.460</td>
+<td align="right">20.22</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">1</td>
+</tr>
+</table>
+
+</article></slide><slide class=''><hgroup><h2>Results, a plot</h2></hgroup><article  id="results-a-plot" class="smaller">
+
+<pre >```{r mt-plot}
+library(ggplot2)
+ggplot(mtcars, aes(y = mpg, x = wt, size = hp)) + geom_point() + stat_smooth(method = &quot;lm&quot;, se = FALSE)
+```</pre>
+
+<p><img src="brb-talk_files/figure-html/mt-plot.png" title="plot of chunk mt-plot" alt="plot of chunk mt-plot" width="720" /></p>
+
+</article></slide><slide class=''><hgroup><h2>Controlling <code>R</code> output</h2></hgroup><article  id="controlling-r-output">
+
+<p>There are three functions I&#39;m aware of that will help create output tables.</p>
+
+<ul>
+<li><code>kable</code> in the <code>knitr</code> package
+
+<ul>
+<li>simple table generator</li>
+<li>markdown, html, or tex output</li>
+<li>few options for customization</li>
+</ul></li>
+<li><code>xtable</code> in the <code>xtable</code> package
+
+<ul>
+<li>many options for customization</li>
+<li>html or tex output</li>
+<li>clunky interface, some options go to <code>xtable()</code> others to <code>print.xtable()</code></li>
+</ul></li>
+<li><code>stargazer</code> in the <code>stargazer</code> package
+
+<ul>
+<li>great for summarizing regression models</li>
+<li>tons of options</li>
+<li>pretty output in html, ascii or tex</li>
+</ul></li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2><code>kable</code> example</h2></hgroup><article  id="kable-example">
+
+<pre >```{r kable, results = &#39;asis&#39;}
+kable(head(mtcars), digits = 2, align = c(rep(&quot;l&quot;, 4), rep(&quot;c&quot;, 4), rep(&quot;r&quot;, 4)))
+```</pre>
+
+<table class = 'rmdtable'>
+<tr class="header">
+<th align="left"></th>
+<th align="left">mpg</th>
+<th align="left">cyl</th>
+<th align="left">disp</th>
+<th align="left">hp</th>
+<th align="center">drat</th>
+<th align="center">wt</th>
+<th align="center">qsec</th>
+<th align="center">vs</th>
+<th align="right">am</th>
+<th align="right">gear</th>
+<th align="right">carb</th>
+</tr>
+<tr class="odd">
+<td align="left">Mazda RX4</td>
+<td align="left">21.0</td>
+<td align="left">6</td>
+<td align="left">160</td>
+<td align="left">110</td>
+<td align="center">3.90</td>
+<td align="center">2.62</td>
+<td align="center">16.46</td>
+<td align="center">0</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="left">Mazda RX4 Wag</td>
+<td align="left">21.0</td>
+<td align="left">6</td>
+<td align="left">160</td>
+<td align="left">110</td>
+<td align="center">3.90</td>
+<td align="center">2.88</td>
+<td align="center">17.02</td>
+<td align="center">0</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Datsun 710</td>
+<td align="left">22.8</td>
+<td align="left">4</td>
+<td align="left">108</td>
+<td align="left">93</td>
+<td align="center">3.85</td>
+<td align="center">2.32</td>
+<td align="center">18.61</td>
+<td align="center">1</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Hornet 4 Drive</td>
+<td align="left">21.4</td>
+<td align="left">6</td>
+<td align="left">258</td>
+<td align="left">110</td>
+<td align="center">3.08</td>
+<td align="center">3.21</td>
+<td align="center">19.44</td>
+<td align="center">1</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Hornet Sportabout</td>
+<td align="left">18.7</td>
+<td align="left">8</td>
+<td align="left">360</td>
+<td align="left">175</td>
+<td align="center">3.15</td>
+<td align="center">3.44</td>
+<td align="center">17.02</td>
+<td align="center">0</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">Valiant</td>
+<td align="left">18.1</td>
+<td align="left">6</td>
+<td align="left">225</td>
+<td align="left">105</td>
+<td align="center">2.76</td>
+<td align="center">3.46</td>
+<td align="center">20.22</td>
+<td align="center">1</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">1</td>
+</tr>
+</table>
+
+</article></slide><slide class=''><hgroup><h2><code>xtable</code> example</h2></hgroup><article  id="xtable-example">
+
+<pre >```{r xtable, results = &#39;asis&#39;}
+library(xtable)
+print(xtable(head(mtcars, 3)), type = &quot;html&quot;)
+```</pre>
+
+<!-- html table generated in R 3.1.0 by xtable 1.7-3 package -->
+<!-- Wed Jun  4 15:30:42 2014 -->
+<TABLE border=1>
+<TR> <TH>  </TH> <TH> 
+
+mpg
+
+</TH> <TH> 
+
+cyl
+
+</TH> <TH> 
+
+disp
+
+</TH> <TH> 
+
+hp
+
+</TH> <TH> 
+
+drat
+
+</TH> <TH> 
+
+wt
+
+</TH> <TH> 
+
+qsec
+
+</TH> <TH> 
+
+vs
+
+</TH> <TH> 
+
+am
+
+</TH> <TH> 
+
+gear
+
+</TH> <TH> 
+
+carb
+
+</TH>  </TR>
+  <TR> <TD align="right"> 
+
+Mazda RX4
+
+</TD> <TD align="right"> 
+
+21.00
+
+</TD> <TD align="right"> 
+
+6.00
+
+</TD> <TD align="right"> 
+
+160.00
+
+</TD> <TD align="right"> 
+
+110.00
+
+</TD> <TD align="right"> 
+
+3.90
+
+</TD> <TD align="right"> 
+
+2.62
+
+</TD> <TD align="right"> 
+
+16.46
+
+</TD> <TD align="right"> 
+
+0.00
+
+</TD> <TD align="right"> 
+
+1.00
+
+</TD> <TD align="right"> 
+
+4.00
+
+</TD> <TD align="right"> 
+
+4.00
+
+</TD> </TR>
+  <TR> <TD align="right"> 
+
+Mazda RX4 Wag
+
+</TD> <TD align="right"> 
+
+21.00
+
+</TD> <TD align="right"> 
+
+6.00
+
+</TD> <TD align="right"> 
+
+160.00
+
+</TD> <TD align="right"> 
+
+110.00
+
+</TD> <TD align="right"> 
+
+3.90
+
+</TD> <TD align="right"> 
+
+2.88
+
+</TD> <TD align="right"> 
+
+17.02
+
+</TD> <TD align="right"> 
+
+0.00
+
+</TD> <TD align="right"> 
+
+1.00
+
+</TD> <TD align="right"> 
+
+4.00
+
+</TD> <TD align="right"> 
+
+4.00
+
+</TD> </TR>
+  <TR> <TD align="right"> 
+
+Datsun 710
+
+</TD> <TD align="right"> 
+
+22.80
+
+</TD> <TD align="right"> 
+
+4.00
+
+</TD> <TD align="right"> 
+
+108.00
+
+</TD> <TD align="right"> 
+
+93.00
+
+</TD> <TD align="right"> 
+
+3.85
+
+</TD> <TD align="right"> 
+
+2.32
+
+</TD> <TD align="right"> 
+
+18.61
+
+</TD> <TD align="right"> 
+
+1.00
+
+</TD> <TD align="right"> 
+
+1.00
+
+</TD> <TD align="right"> 
+
+4.00
+
+</TD> <TD align="right"> 
+
+1.00
+
+</TD> </TR>
+   </TABLE>
+
+
+</article></slide><slide class=''><hgroup><h2><code>stargazer</code> example</h2></hgroup><article  id="stargazer-example" class="smaller">
+
+<pre >```{r star, results = &#39;asis&#39;, warning=FALSE, message=FALSE}
+library(stargazer, quietly = TRUE)
+fit1 &lt;- lm(mpg ~ wt, mtcars)
+fit2 &lt;- lm(mpg ~ wt + hp, mtcars)
+fit3 &lt;- lm(mpg ~ wt + hp + disp, mtcars)
+stargazer(fit1, fit2, fit3, type = &#39;html&#39;)
+```</pre>
+
+<table style="text-align:center"><tr><td colspan="4" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left"></td><td colspan="3">
+
+<em>Dependent variable:</em>
+
+</td></tr>
+<tr><td></td><td colspan="3" style="border-bottom: 1px solid black"></td></tr>
+<tr><td style="text-align:left"></td><td colspan="3">
+
+mpg
+
+</td></tr>
+<tr><td style="text-align:left"></td><td>
+
+(1)
+
+</td><td>
+
+(2)
+
+</td><td>
+
+(3)
+
+</td></tr>
+<tr><td colspan="4" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left">
+
+wt
+
+</td><td>
+
+-5.344<sup>***</sup>
+
+</td><td>
+
+-3.878<sup>***</sup>
+
+</td><td>
+
+-3.801<sup>***</sup>
+
+</td></tr>
+<tr><td style="text-align:left"></td><td>
+
+(0.559)
+
+</td><td>
+
+(0.633)
+
+</td><td>
+
+(1.066)
+
+</td></tr>
+<tr><td style="text-align:left"></td><td></td><td></td><td></td></tr>
+<tr><td style="text-align:left">
+
+hp
+
+</td><td></td><td>
+
+-0.032<sup>***</sup>
+
+</td><td>
+
+-0.031<sup>**</sup>
+
+</td></tr>
+<tr><td style="text-align:left"></td><td></td><td>
+
+(0.009)
+
+</td><td>
+
+(0.011)
+
+</td></tr>
+<tr><td style="text-align:left"></td><td></td><td></td><td></td></tr>
+<tr><td style="text-align:left">
+
+disp
+
+</td><td></td><td></td><td>
+
+-0.001
+
+</td></tr>
+<tr><td style="text-align:left"></td><td></td><td></td><td>
+
+(0.010)
+
+</td></tr>
+<tr><td style="text-align:left"></td><td></td><td></td><td></td></tr>
+<tr><td style="text-align:left">
+
+Constant
+
+</td><td>
+
+37.280<sup>***</sup>
+
+</td><td>
+
+37.230<sup>***</sup>
+
+</td><td>
+
+37.110<sup>***</sup>
+
+</td></tr>
+<tr><td style="text-align:left"></td><td>
+
+(1.878)
+
+</td><td>
+
+(1.599)
+
+</td><td>
+
+(2.111)
+
+</td></tr>
+<tr><td style="text-align:left"></td><td></td><td></td><td></td></tr>
+<tr><td colspan="4" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left">
+
+Observations
+
+</td><td>
+
+32
+
+</td><td>
+
+32
+
+</td><td>
+
+32
+
+</td></tr>
+<tr><td style="text-align:left">
+
+R<sup>2</sup>
+
+</td><td>
+
+0.753
+
+</td><td>
+
+0.827
+
+</td><td>
+
+0.827
+
+</td></tr>
+<tr><td style="text-align:left">
+
+Adjusted R<sup>2</sup>
+
+</td><td>
+
+0.745
+
+</td><td>
+
+0.815
+
+</td><td>
+
+0.808
+
+</td></tr>
+<tr><td style="text-align:left">
+
+Residual Std. Error
+
+</td><td>
+
+3.046 (df = 30)
+
+</td><td>
+
+2.593 (df = 29)
+
+</td><td>
+
+2.639 (df = 28)
+
+</td></tr>
+<tr><td style="text-align:left">
+
+F Statistic
+
+</td><td>
+
+91.380<sup>***</sup> (df = 1; 30)
+
+</td><td>
+
+69.210<sup>***</sup> (df = 2; 29)
+
+</td><td>
+
+44.570<sup>***</sup> (df = 3; 28)
+
+</td></tr>
+<tr><td colspan="4" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left">
+
+<em>Note:</em>
+
+</td><td colspan="3" style="text-align:right">
+
+<sup><em></sup>p&lt;0.1; <sup><strong></sup>p&lt;0.05; <sup></strong></em></sup>p&lt;0.01
+
+</td></tr>
+</table>
+
+
+</article></slide><slide class=''><hgroup><h2>inline results</h2></hgroup><article  id="inline-results" class="smaller">
+
+<p>Generate every in-text number from code. <code>paste</code> and <code>sprintf</code> are my friends.</p>
+
+<pre class = 'prettyprint lang-r'>paste_meansd &lt;- function(x, digits = 2, na.rm = TRUE){
+  paste0(round(mean(x, na.rm = na.rm), digits), &quot; (&quot;, round(sd(x, na.rm = na.rm), digits), &quot;)&quot;)  
+}
+
+## The mean (sd) of a random sample of normals is `r paste_meansd(rnorm(100))`</pre>
+
+<p>The mean (sd) of a random sample of normals is 0.11 (0.9)</p>
+
+<pre class = 'prettyprint lang-r'>sprint_CI95 &lt;- function(mu, se, trans = function(x) x) {
+  lim &lt;- trans(mu + c(-1.96, 1.96)*se)
+<b>  sprintf(&quot;%.2f (95 CI: %.2f to %.2f)&quot;, mu, lim[1], lim[2])
+</b>}
+bfit &lt;- lm(hp ~ disp, mtcars)
+## The coefficient estimate is `r sprint_CI95(bfit$coeff[2], sqrt(diag(vcov(bfit)))[2])`</pre>
+
+<p>The coefficient estimate is 0.44 (95 CI: 0.32 to 0.56).</p>
+
+</article></slide><slide class=''><hgroup><h2>Figure options</h2></hgroup><article  id="figure-options">
+
+<p>The important ones:</p>
+
+<ul>
+<li><code>dev</code>, graphics device. E.g. pdf, png, check out <code>tikzDevice</code> if you are creating pdf output:
+
+<ul>
+<li><a href='http://bit.ly/114GNdP' title=''>http://bit.ly/114GNdP</a></li>
+</ul></li>
+<li><code>path</code> where to save the plot files</li>
+<li><code>fig_width</code>, <code>fig_height</code>, in inches. Can also be set globally.</li>
+<li><code>fig_align</code>, left, right or center</li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>Extending <code class="smaller">knitr</code></h2></hgroup><article  id="extending-knitr">
+
+<p>Output and rendering can be customized endlessly. <code>knitr</code> is written in <code>R</code> to process chunks, so write your own functions. These types of functions are called &quot;hooks&quot;. For example, in this document I used a custom hook to display the code chunks as they appear:</p>
+
+<pre class = 'prettyprint lang-r'>knit_hooks$set(source = function(x, options){
+  if (!is.null(options$verbatim) &amp;&amp; options$verbatim){
+    opts = gsub(&quot;,\\s*verbatim\\s*=\\s*TRUE\\s*&quot;, &quot;&quot;, options$params.src)
+    bef = sprintf(&#39;\n\n    ```{r %s}\n&#39;, opts, &quot;\n&quot;)
+    stringr::str_c(
+      bef, 
+      knitr:::indent_block(paste(x, collapse = &#39;\n&#39;), &quot;    &quot;), 
+      &quot;\n    ```\n&quot;
+    )
+  } else {
+    stringr::str_c(&quot;\n\n```&quot;, tolower(options$engine), &quot;\n&quot;, 
+      paste(x, collapse = &#39;\n&#39;), &quot;\n```\n\n&quot;
+    )
+  }
+})</pre>
+
+<p>Credit: <a href='https://ramnathv.github.io/posts/verbatim-chunks-knitr/' title=''>Ramnath Vaidyanathan</a></p>
+
+</article></slide><slide class=''><hgroup><h2>Getting started</h2></hgroup><article  id="getting-started">
+
+<ul>
+<li>Download the <a href='http://www.rstudio.com/products/rstudio/download/preview/' title=''>Rstudio preview release</a>
+
+<ul>
+<li>It comes with everything you need (except Latex)</li>
+<li>Menu options to create .Rmd files</li>
+<li>Handy button to <code>knit</code> documents</li>
+<li>Preview output</li>
+</ul></li>
+<li>Conversion to output formats uses <code>pandoc</code>
+
+<ul>
+<li>Translates between semantic markup</li>
+<li>Endless customization</li>
+<li>Pass options via the <em>front matter</em> at the top of document</li>
+</ul></li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>Front matter</h2></hgroup><article  id="front-matter">
+
+<ul>
+<li>Document types
+
+<ul>
+<li><code>pdf_document</code>, <code>word_document</code>, <code>html_document</code></li>
+<li><code>beamer_presentation</code>, <code>ioslides_presentation</code></li>
+</ul></li>
+<li>Other options
+
+<ul>
+<li><code>bibliography: mybib.bib</code></li>
+<li>Cite with <code>@paperkey</code></li>
+<li>See <a href='http://rmarkdown.rstudio.com/' title=''>http://rmarkdown.rstudio.com/</a> for complete documentation</li>
+</ul></li>
+</ul>
+
+<pre >---
+title: &quot;Some Tools for Reproducible Research&quot;
+author: &quot;Michael Sachs&quot;
+date: &quot;June 10, 2014&quot;
+output: ioslides_presentation
+---</pre>
+
+<p>Full source for this presentation available <a href='http://github.com/sachsmc/knit-git-markr-guide' title=''>http://github.com/sachsmc/knit-git-markr-guide</a></p>
+
+</article></slide><slide class='segue dark nobackground'><hgroup class = 'auto-fadein'><h2>git</h2></hgroup><article  id="git">
+
+<q> Your closest collaborator is you six months ago, but you don&#39;t reply to emails. </q>
+
+<div class="author">
+<pre >-Paul Wilson</pre></div>
+
+</article></slide><slide class=''><hgroup><h2><code>git</code> and Github</h2></hgroup><article  id="git-and-github">
+
+<ul>
+<li><code>git</code> and <a href='http://github.com' title=''>http://github.com</a> make version control and collaboration easier</li>
+<li>Code, papers, presentations, etc. require iteration and input from multiple sources</li>
+<li><em>Ad hoc</em> approaches suffer and can have disastrous consequences</li>
+<li>Here are some examples</li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>Example 1: Reverting changes</h2></hgroup><article  id="example-1-reverting-changes">
+
+<p>A recent paper I worked on used data from a disease registry, which released &quot;frozen&quot; databases quarterly. While working on the revisions, a new database was released. I used to new database to update the analysis because it contained the most reliable and up to date information. After completing the revisions, I received this email from the lead author (this was in 2013 btw):</p>
+
+<div class="blue2 center">
+<p>&quot;As you can see from the paper I sent you, it is almost complete and I do not want to re-write it. Therefore, I just want the data described in the e-mail below from the June 1, 2011 data freeze. &#8230; Is it possible to reconstruct the data inquiry as per what was originally delivered?&quot;</p></div>
+
+<p>I had not saved prior versions of the analysis code, not to mention the manuscript with all of the results incorporated into the text. My only option at that point was to start over.</p>
+
+</article></slide><slide class=''><hgroup><h2>Example 2: Collaborating on an analysis</h2></hgroup><article  id="example-2-collaborating-on-an-analysis">
+
+<p>Another statistician took over an analysis for a manuscript that I thought was complete. Here is a real email exchange</p>
+
+<div class="blue2 center">
+<p>&quot;The manuscript says that out of 1350 participants there were 411 with incident AFib. However, when I run your code to create the dataset, I only end up with 232. The AFib data came from a file called &#39;mathew_main&#39;. Did you use anything else to get the extra AFib cases?&quot;</p></div>
+
+<p>My response:</p>
+
+<div class="blue2 center">
+<p>&quot;I&#39;m not 100% sure about anything without looking at my code. Which file are you going on? There should be a dated .Rnw file my Afib folder that contains all the analysis code. I believe that calls an R script called &quot;load-data-chs.R&quot;. The mathew_main file does not sound familiar, I suspect that is from a very old version of the paper. &quot;</p></div>
+
+<p>:(</p>
+
+</article></slide><slide class=''><hgroup><h2>Example 3: Incorporating edits on a manuscript</h2></hgroup><article  id="example-3-incorporating-edits-on-a-manuscript">
+
+<p>Applied papers that I&#39;ve worked on had between 5 and 13 authors. Inevitably, a &quot;final&quot; draft of the manuscript (usually a Word document) gets circulated <em>via</em> email and comments or suggestions are solicited. Here are the typical types of responses that I get:</p>
+
+<ul>
+<li>A new word document with tracked changes</li>
+<li>A new word document with untracked changes</li>
+<li>Suggestions listed in the body of an email</li>
+<li>A txt file with suggested changes</li>
+<li>A scanned copy of the paper with hand-written edits</li>
+<li>No response</li>
+</ul>
+
+<p>The challenge is to incorporate (or not) all of the changes from a variety of collaborators, while keeping a record of who has contributed what.</p>
+
+</article></slide><slide class=''><hgroup><h2>Example 4: Sharing content</h2></hgroup><article  id="example-4-sharing-content">
+
+<p>Once a paper gets published, occasionally people want to use or extend the method.</p>
+
+<div class="blue2 center">
+<p>&quot;I would be very grateful if you are able to help me implement this tool in my dataset as well.&quot;</p>
+
+<p>&quot;Could you please send me your code so that I can try to apply it to my example? &quot;</p>
+
+<p>&quot;Would you please kindly e-mail me your article and other works in that field promptly.?&quot;</p></div>
+
+<p><strong>Email is an ineffective tool for sharing code, data, documents</strong></p>
+
+</article></slide><slide class=''><hgroup><h2>What is it?</h2></hgroup><article  id="what-is-it">
+
+<p><code>git</code></p>
+
+<ul>
+<li>&quot;The stupid content tracker&quot;, developed to manage Linux source code
+
+<ul>
+<li>Files organized into <strong>repositories</strong></li>
+<li>Users <strong>commit</strong> changes, additions, deletions</li>
+<li>Entire history of <strong>commits</strong> saved</li>
+</ul></li>
+</ul>
+
+<p><a href='http://github.com' title=''>Github</a></p>
+
+<ul>
+<li>A web interface and host for repositories
+
+<ul>
+<li>Explore repositories</li>
+<li>View code, documents, etc.</li>
+<li>Interact with collaborators</li>
+</ul></li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>Getting started</h2></hgroup><article  id="getting-started-1">
+
+<p>Begin tracking using <code>git init</code>. This creates a hidden file that tells <code>git</code> what to track.</p>
+
+<pre class = 'prettyprint lang-bash'>mkdir my-first-repo
+cd my-first-repo
+git init</pre>
+
+<p>Now add content. Copy over documents or code, or create new files.</p>
+
+<pre class = 'prettyprint lang-bash'>echo &quot;This is a *readme* file for my-first-repo&quot; &gt; readme.md</pre>
+
+</article></slide><slide class=''><hgroup><h2>Tracking</h2></hgroup><article  id="tracking" class="smaller">
+
+<p>Check the status of the tracker by running <code>git status</code>. It will inform you that a file has been changed but it is not tracked:</p>
+
+<pre class = 'prettyprint lang-bash'>On branch master
+
+Initial commit
+
+Untracked files:
+  (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)
+
+  readme.md
+
+nothing added to commit but untracked files present (use &quot;git add&quot; to track)</pre>
+
+<p>Track the new files (the <code>.</code> means add everything in the directory):</p>
+
+<pre class = 'prettyprint lang-bash'>git add .</pre>
+
+</article></slide><slide class=''><hgroup><h2>Committing</h2></hgroup><article  id="committing" class="smaller">
+
+<pre class = 'prettyprint lang-bash'>my-first-repo sachsmc$ git status
+Initial commit
+
+Changes to be committed:
+  (use &quot;git rm --cached &lt;file&gt;...&quot; to unstage)
+
+    new file:   readme.md</pre>
+
+<p>Commit the changes making sure to include a detailed description of what was changed.</p>
+
+<pre class = 'prettyprint lang-bash'>my-first-repo sachsmc$ git commit -m &quot;Added readme.md&quot;
+[master (root-commit) f92799f] Added readme.md
+ 1 file changed, 1 insertion(+)
+ create mode 100644 readme.md</pre>
+
+<img src='git/img/commit1.png' title=''/>
+
+</article></slide><slide class=''><hgroup><h2>Remote repositories</h2></hgroup><article  id="remote-repositories" class="smaller">
+
+<p><img src='git/img/github-init.png' title=''/> <img src='git/img/git-init2.png' title=''/></p>
+
+</article></slide><slide class=''><hgroup><h2>Interacting with remotes</h2></hgroup><article  id="interacting-with-remotes">
+
+<ul>
+<li><strong>Clone</strong> a repository to copy it to your local working drive.</li>
+<li>After making changes, <strong>commit</strong> them locally,</li>
+<li><strong>push</strong> the commit back to the remote repository.</li>
+</ul>
+
+<img src='git/img/remote1.png' title=''/>
+
+</article></slide><slide class=''><hgroup><h2>Getting started</h2></hgroup><article  id="getting-started-2">
+
+<ul>
+<li>Set up an account on <a href='http://github.com' title=''>http://github.com</a></li>
+<li>Install the desktop client <a href='http://mac.github.com' title=''>http://mac.github.com</a> or <a href='http://windows.github.com' title=''>http://windows.github.com</a></li>
+<li>Under settings, install <em>command line tools</em></li>
+<li>Most linux distros come with <code>git</code></li>
+</ul>
+
+</article></slide><slide class='segue dark nobackground'><hgroup class = 'auto-fadein'><h2>Collaborating with Github</h2></hgroup><article  id="collaborating-with-github">
+
+</article></slide><slide class=''><hgroup><h2>The lifecycle of a paper</h2></hgroup><article  id="the-lifecycle-of-a-paper">
+
+<ul>
+<li>I&#39;m working on a paper with my friend Sue</li>
+<li>Statistical analysis + simulation studies + discussion</li>
+<li>I decide to take the lead and create an initial repository</li>
+<li>Add a draft <code>.tex</code> file, some analyses in <code>.R</code> with data and output</li>
+<li>Commit at appropriate stopping points</li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>Branching and merging</h2></hgroup><article  id="branching-and-merging">
+
+<div class="green">
+Main branch is called <em>master</em></div>
+
+<div class="blue">
+Sue creates a new branch called <em>sues-working</em>. Adding, editing, commiting</div>
+
+<p>Commits do not affect the other branch</p>
+
+<img src='git/img/branch1.png' title=''/>
+
+<p>Push all of her changes to github, then <strong>submit a pull request</strong>.</p>
+
+</article></slide><slide class=''><hgroup><h2>Pull request</h2></hgroup><article  id="pull-request">
+
+<img src='git/img/pull-req.png' title=''/>
+
+<aside class='note'><section>A <strong>pull request</strong> is a request to incorporate changes from one branch into another. It doesn&#39;t merge them automatically, but rather opens a discussion about possible changes. The repo owner can review the changes, make comments, and suggest edits before merging. Here we can fully harness the power of <code>git</code> and <code>diff</code>. You can see that every addition, deletion, and change is highlighted in the window. You can make general comments on the request, add comments to specific lines of code, and create <strong>issues</strong>. You can see that <strong>conflicts</strong> are highlighted in yellow. Conflicts arise when the same line is edited in different ways. To resolve a conflict, the file must be edited on one of the branches and committed. Changes that can be merged without conflict are in green.</section></aside>
+
+</article></slide><slide class=''><hgroup><h2>Changes</h2></hgroup><article  id="changes">
+
+<img src='git/img/diff.png' title=''/>
+
+<aside class='note'><section><p>The github desktop application will prompt you to resolve any merge conflicts. It will open up a text editor, showing each conflicting line. You can remove the conflict by choosing from the two options or combining the two in some way. Commit all the changes and the branches can be merged. Again, the entire commit history is saved along with any discussion of issues!</p>
+
+See <a href='https://help.github.com/articles/resolving-merge-conflicts' title=''>https://help.github.com/articles/resolving-merge-conflicts</a> for more information about conflicts.</section></aside>
+
+<img src='git/img/merge.png' title=''/>
+
+</article></slide><slide class=''><hgroup><h2>Smaller contributions</h2></hgroup><article  id="smaller-contributions">
+
+<img src='git/img/filechange.png' title=''/>
+
+</article></slide><slide class=''><hgroup><h2>Issues</h2></hgroup><article  id="issues">
+
+<aside class='note'><section>More expansive or general suggestions can be submitted as <strong>issues</strong>. Many options exist for issues. You can label them, drag and drop images as support, assign specific collaborators to resolve them, and more. <strong>Milestones</strong> are a way to schedule and track big steps, such as journal submission. Once you create a milestone with a due date, you can attach specific issues that need to be achieved to reach that milestone.</section></aside>
+
+<img src='git/img/issue.png' title=''/>
+
+</article></slide><slide class=''><hgroup><h2>Summary</h2></hgroup><article  id="summary">
+
+<ul>
+<li><code>git</code> is a structured approach to tracking content
+
+<ul>
+<li>Small committment to learn and use</li>
+<li>But benefits are enormous</li>
+<li>&#8230; especially if using plain text files</li>
+</ul></li>
+<li><a href='http://github.com' title=''>github</a> is a web interface and repository host
+
+<ul>
+<li>Adds value to <code>git</code></li>
+<li>It&#39;s not Dropbox, formal and structure commits + discussion</li>
+<li>Everything is public</li>
+<li>Alternatives: <a href='http://bitbucket.org' title=''>bitbucket</a>, self-hosting, local-only</li>
+</ul></li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>Solutions to the examples</h2></hgroup><article  id="solutions-to-the-examples">
+
+<ul class = 'build'>
+<li><strong>Example 1</strong> (Go back to using old data)</li>
+<li><code>git revert</code></li>
+<li><strong>Example 2</strong> (Someone else taking over analysis)</li>
+<li>Branch from latest version on <em>master</em></li>
+<li>Won&#39;t save you from bad coding practices</li>
+<li>Having the structure in place up front helps</li>
+<li><strong>Example 3</strong> (Collaborating on manuscript)</li>
+<li>All authors submit pull requests, issues, small changes</li>
+<li>Central record, ample opportunity for discussion</li>
+<li>Who contributed what and where</li>
+<li><strong>Example 4</strong> (Sharing content)</li>
+<li>Easy: Source code available at <a href='http://github.com/sachsmc/knit-git-markr-guide' title=''>http://github.com/sachsmc/knit-git-markr-guide</a></li>
+<li>Better yet, a web page: <a href='http://pages.github.com/' title=''>http://pages.github.com/</a></li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>Resources</h2></hgroup><article  id="resources">
+
+<table class = 'rmdtable'>
+<tr class="header">
+<th align="left">Topic</th>
+<th align="left">Link</th>
+</tr>
+<tr class="odd">
+<td align="left">KBroman&#39;s UWisc Class</td>
+<td align="left"><a href='https://kbroman.github.io/Tools4RR/pages/schedule.html' title=''>https://kbroman.github.io/Tools4RR/pages/schedule.html</a></td>
+</tr>
+<tr class="even">
+<td align="left">Github tutorials</td>
+<td align="left"><a href='http://guides.github.com/' title=''>http://guides.github.com/</a></td>
+</tr>
+<tr class="odd">
+<td align="left">Possible workflows</td>
+<td align="left"><a href='http://www.atlassian.com/git/workflows' title=''>http://www.atlassian.com/git/workflows</a></td>
+</tr>
+<tr class="even">
+<td align="left">Another tutorial</td>
+<td align="left"><a href='http://www.atlassian.com/git/tutorial' title=''>http://www.atlassian.com/git/tutorial</a></td>
+</tr>
+<tr class="odd">
+<td align="left">Knitr homepage</td>
+<td align="left"><a href='http://yihui.name/knitr/' title=''>http://yihui.name/knitr/</a></td>
+</tr>
+<tr class="even">
+<td align="left">rmarkdown documentation</td>
+<td align="left"><a href='http://rmarkdown.rstudio.com/' title=''>http://rmarkdown.rstudio.com/</a></td>
+</tr>
+</table>
+
+<p>More stuff and source available</p>
+
+<p><a href='http://sachsmc.github.io/knit-git-markr-guide' title=''>http://sachsmc.github.io/knit-git-markr-guide</a></p></article></slide>
+
+
+  <slide class="backdrop"></slide>
+
+</slides>
+
+<script src="brb-talk_files/ioslides-13.5.1/js/modernizr.custom.45394.js"></script>
+<script src="brb-talk_files/ioslides-13.5.1/js/prettify/prettify.js"></script>
+<script src="brb-talk_files/ioslides-13.5.1/js/prettify/lang-r.js"></script>
+<script src="brb-talk_files/ioslides-13.5.1/js/prettify/lang-yaml.js"></script>
+<script src="brb-talk_files/ioslides-13.5.1/js/hammer.js"></script>
+<script src="brb-talk_files/ioslides-13.5.1/js/slide-controller.js"></script>
+<script src="brb-talk_files/ioslides-13.5.1/js/slide-deck.js"></script>
+
+<!-- dynamically load mathjax for compatibility with --self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+<!-- map slide visiblity events into shiny -->
+<script>
+  (function() {
+    if (window.jQuery) {
+       window.jQuery(document).on('slideleave', function(e) {
+         window.jQuery(e.target).trigger('hidden');
+      });
+       window.jQuery(document).on('slideenter', function(e) {
+         window.jQuery(e.target).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+</body>
+</html>

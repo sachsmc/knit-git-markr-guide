@@ -1,0 +1,12 @@
+base
+datasets
+ggplot2
+graphics
+grDevices
+knitr
+methods
+stargazer
+stats
+stringr
+utils
+xtable

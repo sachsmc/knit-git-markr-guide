@@ -29,7 +29,7 @@ How exactly to use `knitr` depends on the input document format. First I will de
 
 ### `knitr` with markdown
 
-When I say markdown I am referring to the plain text formatting syntax, as opposed to the software. Markdown is a syntax closely related to html. It is semanic, like html, but it is much less verbose. Markdown documents can in fact stand on there own as readable text documents without being rendered. Semantic means that elements of the document are described by what they represent, as opposed to how they should look. Thus, for a title, you indicate that this text is the title, as opposed to this text should be large font and in bold. Here is an example with the result:
+When I say markdown I am referring to the plain text formatting syntax, as opposed to the software. Markdown is a syntax closely related to html. It is semanic, like html, but it is much less verbose. Markdown documents can in fact stand on their own as readable text documents without being rendered. Semantic means that elements of the document are described by what they represent, as opposed to how they should look. Thus, for a title, you indicate that this text is the title, as opposed to this text should be large font and in bold. Here is an example with the result:
 
 ![mark1](img/mark1.png)
 
@@ -105,8 +105,9 @@ For finer control, use the `xtable` package. There are tons of options (see the 
     print(xtable(head(mtcars)), type = "html")
     ```
 
-
-<TABLE>
+<!-- html table generated in R 3.1.0 by xtable 1.7-3 package -->
+<!-- Tue Jun  3 16:34:20 2014 -->
+<TABLE border=1>
 <TR> <TH>  </TH> <TH> 
 mpg
 </TH> <TH> 
@@ -280,16 +281,18 @@ Valiant
 </TD> <TD align="right"> 
 1.00
 </TD> </TR>
-</TABLE>
+   </TABLE>
 
 
 The `stargazer` package creates good-looking tables with minimal effort. It is especially useful for summarizing a series of regression models. See the help files for all the available options.
 
     ```{r star, results = 'asis', warning=FALSE, message=FALSE}
     library(stargazer, quietly = TRUE)
+
     fit1 <- lm(mpg ~ wt, mtcars)
     fit2 <- lm(mpg ~ wt + hp, mtcars)
     fit3 <- lm(mpg ~ wt + hp + disp, mtcars)
+
     stargazer(fit1, fit2, fit3, type = 'html')
     ```
 
