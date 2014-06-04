@@ -235,7 +235,7 @@ The important ones:
 - `fig_align`, left, right or center
 
 
-## Extending `knitr` {.smaller}
+## Extending knitr {.smaller}
 
 Output and rendering can be customized endlessly. `knitr` is written in `R` to process chunks, so write your own functions. These types of functions are called "hooks". For example, in this document I used a custom hook to display the code chunks as they appear: 
 
