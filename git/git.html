@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta name="generator" content="pandoc" />
+
+<meta name="author" content="Michael Sachs" />
+
+
+<title>git and github</title>
+
+<script src="git_files/jquery-1.11.0/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link href="git_files/bootstrap-2.3.2/css/readable.min.css" rel="stylesheet" />
+<link href="git_files/bootstrap-2.3.2/css/bootstrap-responsive.min.css" rel="stylesheet" />
+<script src="git_files/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet"
+      href="git_files/highlight/default.css"
+      type="text/css" />
+<script src="git_files/highlight/highlight.js"></script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+</head>
+
+<body>
+
+<div class="container-fluid">
+
+<div class="navbar navbar-default">
+  <div class="navbar-inner">
+    <div class="container">
+      <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="brand" href="index.html">Tools for Reproducible Research</a>
+      <div class="nav-collapse collapse">
+        <ul class="nav">
+          <li><a href="http://sachsmc.github.io">Home</a></li>
+            <li><a href="http://github.com/sachsmc/knit-git-markr-guide">Source on Github</a></li>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </div>
+</div>
+
+<div class="container">
+<div class="row">
+<div class="span10 offset1">
+
+<div id="header">
+<h1 class="title">git and github</h1>
+<h4 class="author"><em>Michael Sachs</em></h4>
+</div>
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<blockquote>
+<p>Your closest collaborator is you six months ago, but you don’t reply to emails.</p>
+</blockquote>
+<blockquote>
+<p>-Paul Wilson</p>
+</blockquote>
+<p><code>git</code> and <a href="http://github.com">github</a> are tools to make version control and collaboration easier. Writing code, papers, presentations, and other scientific products requires iteration and input from multiple sources. <em>Ad hoc</em> approaches suffer from a variety of problems that occasionally have disastrous consequences. The following examples illustrate some of these problems.</p>
+<div id="example-1-reverting-changes" class="section level3">
+<h3>Example 1: Reverting changes</h3>
+<p>A recent paper I worked on used data from a disease registry, which released “frozen” databases quarterly. While working on the revisions, a new database was released. I used to new database to update the analysis because it contained the most reliable and up to date information. After completing the revisions, I received this email from the lead author (this was in 2013 btw):</p>
+<blockquote>
+<p>As you can see from the paper I sent you, it is almost complete and I do not want to re-write it. Therefore, I just want the data described in the e-mail below from the June 1, 2011 data freeze. … Is it possible to reconstruct the data inquiry as per what was originally delivered?</p>
+</blockquote>
+<p>I had not saved prior versions of the analysis code, not to mention the manuscript with all of the results incorporated into the text. My only option at that point was to start over.</p>
+</div>
+<div id="example-1b-collaborating-on-an-analysis" class="section level3">
+<h3>Example 1b: Collaborating on an analysis</h3>
+<p>Another statistician took over an analysis for a manuscript that I thought was complete. Here is a real email exchange</p>
+<blockquote>
+<p>The manuscript says that out of 1350 participants there were 411 with incident AFib. However, when I run your code to create the dataset, I only end up with 232. The AFib data came from a file called “mathew_main”. Did you use anything else to get the extra AFib cases?</p>
+</blockquote>
+<p>My response:</p>
+<blockquote>
+<p>I’m not 100% sure about anything without looking at my code. Which file are you going on? There should be a dated .Rnw file my Afib folder that contains all the analysis code. I believe that calls an R script called “load-data-chs.R”. The mathew_main file does not sound familiar, I suspect that is from a very old version of the paper.</p>
+</blockquote>
+<p>:(</p>
+</div>
+<div id="example-2-incorporating-edits-on-a-manuscript" class="section level3">
+<h3>Example 2: Incorporating edits on a manuscript</h3>
+<p>Applied papers that I’ve worked on had between 5 and 13 authors. Inevitably, a “final” draft of the manuscript (usually a Word document) gets circulated <em>via</em> email and comments or suggestions are solicited. Here are the typical types of responses that I get:</p>
+<ul>
+<li>A new word document with tracked changes</li>
+<li>A new word document with untracked changes</li>
+<li>Suggestions listed in the body of an email</li>
+<li>A txt file with suggested changes</li>
+<li>A scanned copy of the paper with hand-written edits</li>
+<li>No response</li>
+</ul>
+<p>The challenge is to incorporate (or not) all of the changes from a variety of collaborators, while keeping a record of who has contributed what.</p>
+</div>
+<div id="example-3-sharing-content" class="section level3">
+<h3>Example 3: Sharing content</h3>
+<p>Once a paper gets published, occasionally people want to use or extend the method.</p>
+<blockquote>
+<p>I would be very grateful if you are able to help me implement this tool in my dataset as well.</p>
+</blockquote>
+<blockquote>
+<p>Could you please send me your code so that I can try to apply it to my example?</p>
+</blockquote>
+<blockquote>
+<p>Would you please kindly e-mail me your article and other works in that field promptly.?</p>
+</blockquote>
+<p><strong>Email is an ineffective tool for sharing code, data, documents</strong></p>
+</div>
+</div>
+<div id="what-are-git-and-github" class="section level2">
+<h2>What are <code>git</code> and github?</h2>
+<p><code>git</code> is a system for formal version control. The manpage describes it as “the stupid content tracker”. It was developed to manage the source code for Linux. Now it is used to track text files, code, and more. Files are organized into <strong>repositories</strong> in which users <strong>commit</strong> changes and/or additions. The entire history of <strong>commits</strong> and their comments are stored by <code>git</code> so that at any point, you can view the differences between current and past versions. It comes preinstalled in Linux and OSX. Type <code>man git</code> at the console for more information.</p>
+<p>Github <a href="http://github.com">(www.github.com)</a> is a website that hosts <code>git</code> repositories. It provides an interface for exploring repositories, viewing code, downloading repositories, and interacting with collaborators. It also provides some handy services like website hosting, markdown rendering, and training.</p>
+<p>There are alternative to github. The one that I’m aware of is called <a href="http://bitbucket.org">Bitbucket</a>. <em>You don’t need to use a web host to use <code>git</code></em>. You can use <code>git</code> locally to track content (on a network drive, for instance).</p>
+</div>
+<div id="how-do-i-use-them" class="section level2">
+<h2>How do I use them?</h2>
+<div id="getting-started" class="section level3">
+<h3>Getting started</h3>
+<p>Begin tracking the contents of a folder by using <code>git init</code>. This creates a hidden file that tells <code>git</code> what files to track. Congratulations, you’ve created your first repository!</p>
+<p><img src="img/init.png" alt="init" /></p>
+<p>Now add content to the folder. Copy over documents or code, or create new files. Here we will make a simple readme file in <a href="http://rmarkdown.rstudio.com">markdown</a> syntax.</p>
+<pre><code>echo &quot;This is a *readme* file for my-first-repo&quot; &gt; readme.md</code></pre>
+<p>Check the status of the tracker by running <code>git status</code>. It will inform you that a file has been changed but it is not tracked:</p>
+<p>```{bash} On branch master</p>
+<p>Initial commit</p>
+<p>Untracked files: (use “git add <file>…” to include in what will be committed)</p>
+<pre><code>readme.md</code></pre>
+<p>nothing added to commit but untracked files present (use “git add” to track)</p>
+<p>```</p>
+<p>Track the new files (the <code>.</code> means add everything in the directory): <code>{bash} git add .</code> Checking the status again, we see that the changes are <strong>staged</strong>, meaning ready to be committed.</p>
+<p>```{bash} my-first-repo sachsmc$ git status On branch master</p>
+<p>Initial commit</p>
+<p>Changes to be committed: (use “git rm –cached <file>…” to unstage)</p>
+<pre><code>new file:   readme.md</code></pre>
+<p>```</p>
+<p>Commit the changes making sure to include a detailed description of what was changed.</p>
+<p><code>{bash} my-first-repo sachsmc$ git commit -m &quot;Added readme.md&quot; [master (root-commit) f92799f] Added readme.md  1 file changed, 1 insertion(+)  create mode 100644 readme.md</code></p>
+<p>Now this is what the repository history looks like:</p>
+<p><img src="img/commit1.png" alt="commmit1" /></p>
+</div>
+<div id="remote-repositories" class="section level3">
+<h3>Remote repositories</h3>
+<p>Github makes it easy to centralize and share your work. All of the above steps can be accomplished in the github web interface. From the repositories tab, click on <strong>new repository</strong></p>
+<p><img src="img/github-init.png" alt="git1" /></p>
+<p>Git your repo a name, and click the option to initialize with a readme. Finally, click <strong>create repository</strong></p>
+<p><img src="img/git-init2.png" alt="git2" /></p>
+<p>There are several ways to interact with a remote repository. <strong>Clone</strong> a repository to copy it to your local working drive. After making changes, <strong>commit</strong> them locally, then <strong>push</strong> the commit back to the remote repository. Doing this ensures that the <em>entire commit history</em> is saved to the remote repository.</p>
+<p><img src="img/remote1.png" alt="git-remote" /></p>
+<p>If you change computers, or have a hard-drive failure, or you aren’t sure what local folder is most up-to-date, simply clone the remote repository and continue working.</p>
+<p>Github provides desktop applications for Windows, OSX, and Linux. Using these applications makes interacting with remotes much easier. See this link for resources to get started with whichever OS you prefer <a href="https://help.github.com/categories/54/articles">https://help.github.com/categories/54/articles</a>.</p>
+</div>
+</div>
+<div id="collaborating-with-github" class="section level2">
+<h2>Collaborating with Github</h2>
+<p>Let’s learn how to use github by walking through the lifecycle of a scientific article. Let’s say I’m working on a paper with my friend Sue. The paper involves some statistical analysis of real data, and some simulation studies. Sue is the expert on the data example and application, while I’m taking the lead on the manuscript. Create an initial commit. I come up with an inital draft <code>.tex</code> file, some analyses in <code>.R</code> together with all the associated data and output. I make commits at appropriate stopping points.</p>
+<div id="branching-and-merging" class="section level3">
+<h3>Branching and merging</h3>
+<p>Sue is ready to work on the paper. Instead of working on the same repo, she creates a new <strong>branch</strong>. By default, the main branch is called <code>master</code> which represents the most stable version of the content. Sue makes a branch called <code>sues-working</code>. She edits the files as she sees fit, adding, changing, and making commits along the way. Changes she commits do not affect the <code>master</code>. I also continue working and making commits.</p>
+<p><img src="img/branch1.png" alt="branch" /></p>
+<p>When Sue is finished making her contributions, she is ready to merge the <code>sues-working</code> branch back into <code>master</code>. To accomplish this, she will push all of her changes to github, then <strong>submit a pull request</strong>.</p>
+<p><img src="img/pull-req.png" alt="pull" /></p>
+<p>A <strong>pull request</strong> is a request to incorporate changes from one branch into another. It doesn’t merge them automatically, but rather opens a discussion about possible changes. The repo owner can review the changes, make comments, and suggest edits before merging. Here we can fully harness the power of <code>git</code> and <code>diff</code>. You can see that every addition, deletion, and change is highlighted in the window. You can make general comments on the request, add comments to specific lines of code, and create <strong>issues</strong>. You can see that <strong>conflicts</strong> are highlighted in yellow. Conflicts arise when the same line is edited in different ways. To resolve a conflict, the file must be edited on one of the branches and committed. Changes that can be merged without conflict are in green.</p>
+<p><img src="img/diff.png" alt="pull2" /></p>
+<p>The github desktop application will prompt you to resolve any merge conflicts. It will open up a text editor, showing each conflicting line. You can remove the conflict by choosing from the two options or combining the two in some way. Commit all the changes and the branches can be merged. Again, the entire commit history is saved along with any discussion of issues!</p>
+<p>See <a href="https://help.github.com/articles/resolving-merge-conflicts">https://help.github.com/articles/resolving-merge-conflicts</a> for more information about conflicts.</p>
+<p><img src="img/merge.png" alt="merge" /></p>
+</div>
+<div id="smaller-contributions" class="section level3">
+<h3>Smaller contributions</h3>
+<p>For small changes such as typos or rephrasing, collaborators can edit files directly in the github web interface. Pressing submit proposes the file changes that the owner can accept, reject, or modify.</p>
+<p><img src="img/filechange.png" alt="propose" /></p>
+<p>More expansive or general suggestions can be submitted as <strong>issues</strong>. Many options exist for issues. You can label them, drag and drop images as support, assign specific collaborators to resolve them, and more. <strong>Milestones</strong> are a way to schedule and track big steps, such as journal submission. Once you create a milestone with a due date, you can attach specific issues that need to be achieved to reach that milestone.</p>
+<p><img src="img/issue.png" alt="issue" /></p>
+</div>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>This was a brief introduction to using git and github for collaboration. It is a bit of a commitment to learn and use, but the benefits are enormous. You will save the entire history of changes to a project, you can go back to any point in time (and see what has changed between any two points in time), you don’t have to worry about breaking things that work, and you can easily merge changes from multiple people.</p>
+</div>
+<div id="solutions-to-the-examples" class="section level2">
+<h2>Solutions to the Examples</h2>
+<div id="example-1-reverting-changes-1" class="section level3">
+<h3>Example 1: Reverting changes</h3>
+<p>To go back to a previous version of what you had already done, use <code>git revert</code>:</p>
+<p><code>{bash} git revert HEAD~2..HEAD</code> This command will revert to what you had two commits ago. In fact, what this does behind the scenes is create a new commit that reverses all the changes made during the previous two commits. This way ensures that the entire history is saved (in case the PI changes their mind again later).</p>
+</div>
+<div id="example-1a-determining-latest-version" class="section level3">
+<h3>Example 1a: Determining latest version</h3>
+<p>Easy, look and see what the latest code does in <code>master</code>. Obviously, if you have poor coding practices and sloppy file management, <code>git</code> won’t save you. At least there is a public record of what was done most recently.</p>
+</div>
+<div id="example-2-collaborating" class="section level3">
+<h3>Example 2: Collaborating</h3>
+<p>As in the previous section, all of our co-authors will make changes on github. Heavy contributors are likely to make their own branches and submit pull requests. Others may just fix typos. Either way, there is a centralized record of who is doing what and ample opportunities to discuss changes.</p>
+</div>
+<div id="example-3-sharing" class="section level3">
+<h3>Example 3: Sharing</h3>
+<p>Another easy one to fix with <code>git</code> and github. At the end of every paper or presentation, include a sentence like “code for this analysis is available at <a href="https://github.com/sachsmc/knit-git-markr-guide/blob/master/git/git.md">the repository</a>”. Better yet, make a webpage: <a href="http://sachsmc.github.io">http://sachsmc.github.io</a>. Interested parties have easy access to you work, and are encouraged to contribute.</p>
+<p>There are many more features available and more are introduced as github develops. Here are some links to continue exploring the exciting world of version control.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Topic</th>
+<th align="left">Link</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">KBroman’s guide</td>
+<td align="left"><a href="http://kbroman.github.io/github_tutorial/">http://kbroman.github.io/github_tutorial/</a></td>
+</tr>
+<tr class="even">
+<td align="left">Github tutorials</td>
+<td align="left"><a href="http://guides.github.com/">http://guides.github.com/</a></td>
+</tr>
+<tr class="odd">
+<td align="left">Possible workflows</td>
+<td align="left"><a href="http://www.atlassian.com/git/workflows">http://www.atlassian.com/git/workflows</a></td>
+</tr>
+<tr class="even">
+<td align="left">Another tutorial</td>
+<td align="left"><a href="http://www.atlassian.com/git/tutorial">http://www.atlassian.com/git/tutorial</a></td>
+</tr>
+<tr class="odd">
+<td align="left">Github website hosting</td>
+<td align="left"><a href="http://pages.github.com/">http://pages.github.com/</a></td>
+</tr>
+<tr class="even">
+<td align="left">Bitbucket alternative</td>
+<td align="left"><a href="http://bitbucket.org">http://bitbucket.org</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with --self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

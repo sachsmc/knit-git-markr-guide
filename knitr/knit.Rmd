@@ -1,13 +1,15 @@
 ---
-title: "knitr"
+title: "Introduction to `knitr`"
 author: Michael Sachs
 output: 
-  md_document:
-    variant: markdown_github
+  html_document:
+    theme: readable
+    self_contained: false
+    includes:
+      before_body: ../before_body.html
+      after_body: ../after_body.html
 ---
 
-Introduction to `knitr` 
-===================
 
 > Programs are meant to be read by humans and only incidentally for computers to execute. 
 

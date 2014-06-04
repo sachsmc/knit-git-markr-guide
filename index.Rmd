@@ -1,0 +1,26 @@
+---
+title: 
+output: 
+  html_document:
+    theme: readable
+    self_contained: false
+    includes:
+      before_body: before_body.html
+      after_body: after_body.html
+---
+
+
+Some tools for reproducible research
+========
+
+Several recent high-profile scandals and studies have highlighted the issue of irreproducibility of research findings in science. Statisiticians have a unique role in the scientific process in our responsibilities to guide the data acquisition, develop code to wrangle that data, develop code that implements a statistical analysis, and communicate the results. Further complicating the issue is the fact that the scientific process is iterative, undergoing countless updates through feedback from multiple sources. A minimum standard for our contributions is that the code and data be assembled and documented in a way that another party can re-create all of the results. Two tools that are helpful in acheiving that standard are knitr and git. Knitr is an R package that integrates computing and reporting. It enables users to create reports that contain code for statistical analysis alongside the results and documentation of that analysis. Git is a formal version control system used for tracking changes to content. Together, these tools take us a long way to ensuring that our contributions are reproducible while making our lives easier. I will demonstrate how I've incorporated these tools into my workflow, and provide the resources neccessary for my fellow statisticians to get started. 
+
+### [Presentation](brb-talk.html)
+
+
+### [To learn about `knitr` click here](knitr/knit.html)
+
+
+### [To learn about `git` click here](git/git.html)
+
+
