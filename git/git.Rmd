@@ -95,7 +95,7 @@ echo "This is a *readme* file for my-first-repo" > readme.md
 
 Check the status of the tracker by running `git status`. It will inform you that a file has been changed but it is not tracked: 
 
-```{bash}
+```bash
 On branch master
 
 Initial commit
@@ -110,12 +110,12 @@ nothing added to commit but untracked files present (use "git add" to track)
 ```
 
 Track the new files (the `.` means add everything in the directory): 
-```{bash}
+```bash
 git add .
 ``` 
 Checking the status again, we see that the changes are **staged**, meaning ready to be committed. 
 
-```{bash}
+```bash
 my-first-repo sachsmc$ git status
 On branch master
 
@@ -129,7 +129,7 @@ Changes to be committed:
 
 Commit the changes making sure to include a detailed description of what was changed. 
 
-```{bash}
+```bash
 my-first-repo sachsmc$ git commit -m "Added readme.md"
 [master (root-commit) f92799f] Added readme.md
  1 file changed, 1 insertion(+)
@@ -208,7 +208,7 @@ This was a brief introduction to using git and github for collaboration. It is a
 
 To go back to a previous version of what you had already done, use `git revert`:
 
-```{bash}
+```bash
 git revert HEAD~2..HEAD
 ```
 This command will revert to what you had two commits ago. In fact, what this does behind the scenes is create a new commit that reverses all the changes made during the previous two commits. This way ensures that the entire history is saved (in case the PI changes their mind again later). 
