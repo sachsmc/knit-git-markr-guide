@@ -254,7 +254,7 @@ library(xtable)
 print(xtable(head(mtcars)), type = &quot;html&quot;)
 ```</code></pre>
 <!-- html table generated in R 3.1.0 by xtable 1.7-3 package -->
-<!-- Wed Jun  4 16:07:45 2014 -->
+<!-- Fri Jun  6 14:04:13 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> 
 mpg
@@ -567,9 +567,50 @@ F Statistic
 </div>
 <div id="figures" class="section level3">
 <h3>Figures</h3>
+<p>In general, figures will appear in a knit document exactly as they would appear in the <code>R</code> session. There are several important figure options to be aware of.</p>
+<ul>
+<li><code>dev</code>, controls the graphics device used to create the figures. For example pdf, png, or jpeg. Check out <code>tikzDevice</code> if you are creating pdf output. The <code>tikzDevice</code> generates Latex code from <code>R</code> plots for use in Latex documents. That way, all fonts match the main text, and the Tex syntax for mathematics can be used directly in plots. Here are two examples of the power of <code>tikzDevice</code>: <a href="http://bit.ly/114GNdP">http://bit.ly/114GNdP</a>, <a href="http://cran.r-project.org/web/packages/tikzDevice/vignettes/tikzDevice.pdf">example</a></li>
+<li><code>path</code> what directory to save the figures.</li>
+<li><code>fig_width</code>, <code>fig_height</code>, in inches. Can also be set globally.</li>
+<li><code>fig_align</code>, left, right or center.</li>
+</ul>
 </div>
 <div id="inline-results" class="section level3">
 <h3>Inline results</h3>
+<p>In my papers and reports, I strive to generate every in-text number from code. Anytime I reference a sample size, report summary statistics, or p-values in the text, <code>paste</code> and <code>sprintf</code> are my friends. Reporting in this way means no more missed corrections when you have to rerun an analysis, no more rounding errors, and the comfort that you didn’t mis-type a digit. Here are a couple examples using <code>paste</code> and <code>sprintf</code>.</p>
+<pre class="r"><code>paste_meansd &lt;- function(x, digits = 2, na.rm = TRUE){
+  paste0(round(mean(x, na.rm = na.rm), digits), &quot; (&quot;, round(sd(x, na.rm = na.rm), digits), &quot;)&quot;)  
+}
+
+## The mean (sd) of a random sample of normals is `r paste_meansd(rnorm(100))`</code></pre>
+<p>The mean (sd) of a random sample of normals is -0.04 (1.04)</p>
+<pre class="r"><code>sprint_CI95 &lt;- function(mu, se, trans = function(x) x) {
+  lim &lt;- trans(mu + c(-1.96, 1.96)*se)
+  sprintf(&quot;%.2f (95 CI: %.2f to %.2f)&quot;, mu, lim[1], lim[2])
+}
+bfit &lt;- lm(hp ~ disp, mtcars)
+## The coefficient estimate is `r sprint_CI95(bfit$coeff[2], sqrt(diag(vcov(bfit)))[2])`</code></pre>
+<p>The coefficient estimate is 0.44 (95 CI: 0.32 to 0.56).</p>
+</div>
+<div id="extending-knitr" class="section level3">
+<h3>Extending knitr</h3>
+<p>Output and rendering can be customized endlessly. <code>knitr</code> is written in <code>R</code> to process chunks, so write your own functions. These types of functions are called “hooks”. For example, in this document I used a custom hook to display the code chunks as they appear:</p>
+<pre class="r"><code>knit_hooks$set(source = function(x, options){
+  if (!is.null(options$verbatim) &amp;&amp; options$verbatim){
+    opts = gsub(&quot;,\\s*verbatim\\s*=\\s*TRUE\\s*&quot;, &quot;&quot;, options$params.src)
+    bef = sprintf(&#39;\n\n    ```{r %s}\n&#39;, opts, &quot;\n&quot;)
+    stringr::str_c(
+      bef, 
+      knitr:::indent_block(paste(x, collapse = &#39;\n&#39;), &quot;    &quot;), 
+      &quot;\n    ```\n&quot;
+    )
+  } else {
+    stringr::str_c(&quot;\n\n```&quot;, tolower(options$engine), &quot;\n&quot;, 
+      paste(x, collapse = &#39;\n&#39;), &quot;\n```\n\n&quot;
+    )
+  }
+})</code></pre>
+<p>Credit: <a href="https://ramnathv.github.io/posts/verbatim-chunks-knitr/">Ramnath Vaidyanathan</a></p>
 </div>
 </div>
 <div id="output-formats" class="section level1">
@@ -594,18 +635,48 @@ output:
   pdf_document:
     keep_tex: true
 ---</code></pre>
-<p>Other commond document formats are <code>word_document</code>, <code>html_document</code>, and <code>beamer_presentation</code>. You can include a bibliography in a variety of formats, including <code>.bib</code>, with the <code>bibliography: myfile.bib</code> option. Include citations with the <code>@auth99</code> syntax.</p>
+<p>Other commond document formats are <code>word_document</code>, <code>html_document</code>, and <code>beamer_presentation</code>. You can include a bibliography in a variety of formats, including <code>.bib</code>, with the <code>bibliography: myfile.bib</code> option. Include citations with the <code>@bibkey</code> syntax.</p>
 <p>To recap, this diagram illustrates my typical workflow. I start with a .Rmd, an r-markdown document with code, background, and descriptions. <code>knitr</code> does the work to evaluate the code, putting the results in a markdown document, which can then be converted to a variety of formats with pandoc. To extract the R code from the original document I use the <code>knitr::purl</code> function. I can then easily incorporate the code chunks into other document types, like presentations.</p>
 <p><img src="img/knitr-workflow.png" alt="flow" /></p>
+<p>These tools are powerful and useful for all of the beautiful reports and variety of documents you can create. More important, however, are the plain-text files that generate the reports. Writing code along with prose describing the analysis gives others and our future selves a better and clearer understanding of the analysis itself. <code>knitr</code> makes it easy to write analysis code for people, not computers. Do your future self a favor and start using <code>knitr</code> today.</p>
 </div>
 </div>
 <div id="resources" class="section level1">
 <h1>Resources</h1>
-<div id="installation" class="section level3">
-<h3>Installation</h3>
+<div id="getting-started" class="section level2">
+<h2>Getting started</h2>
+<ul>
+<li>Download the <a href="http://www.rstudio.com/products/rstudio/download/preview/">Rstudio preview release</a>
+<ul>
+<li>It comes with everything you need (except Latex)</li>
+<li>Menu options to create .Rmd files</li>
+<li>Handy button to <code>knit</code> documents</li>
+<li>Preview output</li>
+</ul></li>
+<li>Conversion to output formats uses <code>pandoc</code>
+<ul>
+<li>Translates between semantic markup</li>
+<li>Endless customization</li>
+<li>Pass options via the <em>front matter</em> at the top of document</li>
+</ul></li>
+</ul>
 </div>
-<div id="help" class="section level3">
-<h3>Help</h3>
+<div id="front-matter" class="section level2">
+<h2>Front matter</h2>
+<ul>
+<li>Document types
+<ul>
+<li><code>pdf_document</code>, <code>word_document</code>, <code>html_document</code></li>
+<li><code>beamer_presentation</code>, <code>ioslides_presentation</code></li>
+</ul></li>
+<li>Other options
+<ul>
+<li><code>bibliography: mybib.bib</code></li>
+<li>Cite with <code>@paperkey</code></li>
+<li>See <a href="http://rmarkdown.rstudio.com/">http://rmarkdown.rstudio.com/</a> for complete documentation</li>
+</ul></li>
+</ul>
+<p>Full source for this webpage available <a href="http://github.com/sachsmc/knit-git-markr-guide">http://github.com/sachsmc/knit-git-markr-guide</a></p>
 </div>
 </div>
 
