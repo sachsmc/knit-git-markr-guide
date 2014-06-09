@@ -215,7 +215,7 @@ The mean (sd) of a random sample of normals is `r paste_meansd(rnorm(100))`
 sprint_CI95 <- function(mu, se, trans = function(x) x) {
   lim <- trans(mu + c(-1.96, 1.96)*se)
   ### <b>
-  sprintf("%.2f (95 CI: %.2f to %.2f)", mu, lim[1], lim[2])
+  sprintf("%.2f (95%% CI: %.2f to %.2f)", mu, lim[1], lim[2])
   ### </b>
 }
 bfit <- lm(hp ~ disp, mtcars)
