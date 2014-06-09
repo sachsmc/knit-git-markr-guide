@@ -254,7 +254,7 @@ library(xtable)
 print(xtable(head(mtcars)), type = &quot;html&quot;)
 ```</code></pre>
 <!-- html table generated in R 3.1.0 by xtable 1.7-3 package -->
-<!-- Fri Jun  6 14:04:13 2014 -->
+<!-- Mon Jun  9 08:57:49 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> 
 mpg
@@ -583,14 +583,14 @@ F Statistic
 }
 
 ## The mean (sd) of a random sample of normals is `r paste_meansd(rnorm(100))`</code></pre>
-<p>The mean (sd) of a random sample of normals is -0.04 (1.04)</p>
+<p>The mean (sd) of a random sample of normals is 0.04 (1.01)</p>
 <pre class="r"><code>sprint_CI95 &lt;- function(mu, se, trans = function(x) x) {
   lim &lt;- trans(mu + c(-1.96, 1.96)*se)
-  sprintf(&quot;%.2f (95 CI: %.2f to %.2f)&quot;, mu, lim[1], lim[2])
+  sprintf(&quot;%.2f (95%% CI: %.2f to %.2f)&quot;, mu, lim[1], lim[2])
 }
 bfit &lt;- lm(hp ~ disp, mtcars)
 ## The coefficient estimate is `r sprint_CI95(bfit$coeff[2], sqrt(diag(vcov(bfit)))[2])`</code></pre>
-<p>The coefficient estimate is 0.44 (95 CI: 0.32 to 0.56).</p>
+<p>The coefficient estimate is 0.44 (95% CI: 0.32 to 0.56).</p>
 </div>
 <div id="extending-knitr" class="section level3">
 <h3>Extending knitr</h3>
