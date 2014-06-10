@@ -90,9 +90,12 @@ Plain-text formatting. Indicate what elements represent, not how they should loo
 
 ![markdown](knitr/img/mark1.png)
 
-## Contrast with html and tex
+## Contrast with html
 
 ![ht](knitr/img/html.png)
+
+## ... and tex
+
 ![tex](knitr/img/tex.png)
 
 ## Incorporating code chunks

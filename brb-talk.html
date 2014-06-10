@@ -186,9 +186,13 @@
 
 <img src='knitr/img/mark1.png' title=''/>
 
-</article></slide><slide class=''><hgroup><h2>Contrast with html and tex</h2></hgroup><article  id="contrast-with-html-and-tex">
+</article></slide><slide class=''><hgroup><h2>Contrast with html</h2></hgroup><article  id="contrast-with-html">
 
-<p><img src='knitr/img/html.png' title=''/> <img src='knitr/img/tex.png' title=''/></p>
+<img src='knitr/img/html.png' title=''/>
+
+</article></slide><slide class=''><hgroup><h2>&#8230; and tex</h2></hgroup><article  id="and-tex">
+
+<img src='knitr/img/tex.png' title=''/>
 
 </article></slide><slide class=''><hgroup><h2>Incorporating code chunks</h2></hgroup><article  id="incorporating-code-chunks">
 
@@ -202,7 +206,7 @@
 
 <p>Inline code uses single backticks</p>
 
-<p>Here I am using <code>`#r rnorm(1)`</code> to generate a random digit: -0.0107. (Omit the pound sign)</p>
+<p>Here I am using <code>`#r rnorm(1)`</code> to generate a random digit: -0.316. (Omit the pound sign)</p>
 
 </article></slide><slide class=''><hgroup><h2>Results, raw output</h2></hgroup><article  id="results-raw-output" class="smaller">
 
@@ -493,7 +497,7 @@ print(xtable(head(mtcars, 3)), type = &quot;html&quot;)
 ```</pre>
 
 <!-- html table generated in R 3.1.0 by xtable 1.7-3 package -->
-<!-- Mon Jun  9 08:58:28 2014 -->
+<!-- Tue Jun 10 09:07:28 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> 
 
@@ -931,7 +935,7 @@ F Statistic
 
 ## The mean (sd) of a random sample of normals is `r paste_meansd(rnorm(100))`</pre>
 
-<p>The mean (sd) of a random sample of normals is 0.03 (1.05)</p>
+<p>The mean (sd) of a random sample of normals is -0.03 (1.02)</p>
 
 <pre class = 'prettyprint lang-r'>sprint_CI95 &lt;- function(mu, se, trans = function(x) x) {
   lim &lt;- trans(mu + c(-1.96, 1.96)*se)
