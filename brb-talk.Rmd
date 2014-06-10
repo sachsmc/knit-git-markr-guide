@@ -237,6 +237,12 @@ The important ones:
 - `fig_width`, `fig_height`, in inches. Can also be set globally.
 - `fig_align`, left, right or center
 
+Other options
+
+- `include = FALSE` evaluates code but doesn't include anything
+- `echo = FALSE` don't display results
+- `warning = FALSE` don't display warnings
+- `cache = TRUE` cache results for long-running stuff
 
 ## Extending knitr {.smaller}
 
